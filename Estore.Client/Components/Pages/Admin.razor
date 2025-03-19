@@ -1,0 +1,63 @@
+﻿@page "/admin"
+@rendermode InteractiveServer
+@using Core.Services
+@using Core.DTOs
+@using Core.Entites
+@inject ProductService productService
+
+<div class="d-flex flex-row justify-center">
+
+    @* <MudContainer MaxWidth="MaxWidth.Small" Style="margin">
+        <MudForm>
+            <MudTextField @bind-Value="Name" Label="Product Name" Required="true" />
+            <MudTextField @bind-Value="Price" Label="Price" Required="true" Type="number" />
+            <MudTextField @bind-Value="Stock" Label="Stock" Required="true" Type="number" />
+            <MudTextField @bind-Value="Description" Label="Description" />
+            <MudTextField @bind-Value="Category" Label="Category" />
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SubmitForm">Submit</MudButton>
+        </MudForm>
+    </MudContainer> *@
+
+    <MudDataGrid Items="@products" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+        <Columns>
+            <PropertyColumn Property="x => x.Name" />
+            <PropertyColumn Property="x => x.Price" />
+            <PropertyColumn Property="x => x.StockQuantity" Title="Stock Quantity" />
+            <PropertyColumn Property="x => x.IsProductAvailable" Title="Discontinued" />
+            <PropertyColumn Property="x => x.Category.CategoryName" />
+            <TemplateColumn CellClass="justify-content">
+                <CellTemplate>
+                    <MudStack Row>
+                        <MudIcon @onclick="@(()=>Edit())" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
+                        <MudIcon @onclick="@(()=>Delete())" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+    </MudDataGrid>
+
+
+</div>
+@code {
+    
+    public IEnumerable<ProductDTO> products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllAsync();
+    }
+
+    public async Task GetAllAsync()
+    {
+        products = await productService.GetAllProductsAsync();
+    }
+
+    public void Edit()
+    {
+
+    }
+    public void Delete()
+    {
+
+    }
+}

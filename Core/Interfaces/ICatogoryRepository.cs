@@ -1,7 +1,7 @@
 ﻿using Core.Entites;
 
-namespace Core.Interfaces
-{
+namespace Core.Interfaces;
+
     public interface ICatogoryRepository
     {
         Task<IEnumerable<Category>> GetAllAsync();
@@ -11,4 +11,4 @@ namespace Core.Interfaces
         Task DeleteAsync(int id);
 
     }
-}
+

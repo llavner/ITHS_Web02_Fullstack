@@ -15,9 +15,4 @@
     <PackageReference Include="Extensions.MudBlazor.StaticInput" Version="2.*" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <ProjectReference Include="..\API\API.csproj" />
-  </ItemGroup>
-
 </Project>

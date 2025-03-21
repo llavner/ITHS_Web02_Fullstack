@@ -1,0 +1,94 @@
+﻿@page "/"
+@using Core.DTOs
+@rendermode InteractiveServer
+
+<MudAppBar Color="Color.Primary" Fixed="true">
+
+        <div style="display: flex; align-items: center; justify-content: space-between">
+            <MudAvatar Size="Size.Large" Src="" Alt="Company Logo" />
+            <MudText Typo="Typo.h6" Class="ml-2">Record Store</MudText>
+        </div>
+
+        <div style="flex-grow: 1; display: flex; justify-content: center;">
+            <SearchBar Items="products" OnSearch="UpdateFilteredProducts"></SearchBar>
+        </div>
+
+        <div style="display: flex; align-items: center;">
+            <MudMenu Dense Variant="Variant.Text" Size="Size.Large" Color="Color.Inherit" Icon="@Icons.Material.Filled.Store">
+                <MudMenuItem Href="/" ForceLoad Icon="@Icons.Material.TwoTone.Login" IconColor="Color.Primary" Label="Log in" />
+                <MudDivider />
+                <MudMenuItem Href="/" ForceLoad Icon="@Icons.Material.TwoTone.Logout" IconColor="Color.Primary" Label="Sign Out" />
+            </MudMenu>
+        </div>
+    </MudAppBar>
+
+<div id="cardArray">
+
+    <MudCard>
+        <MudCardMedia Image="images/door.jpg" Height="200" />
+        <MudCardContent>
+            <MudText Typo="Typo.h5">Old Paint</MudText>
+            <MudText Typo="Typo.body2">Old paint found on a stone house door.</MudText>
+            <MudText Typo="Typo.body2">This photo was taken in a small village in Istra Croatia.</MudText>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Text" Color="Color.Primary">Share</MudButton>
+            <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
+        </MudCardActions>
+    </MudCard>
+
+    <MudCard>
+        <MudCardMedia Image="images/door.jpg" Height="200" />
+        <MudCardContent>
+            <MudText Typo="Typo.h5">New Paint</MudText>
+            <MudText Typo="Typo.body2">New paint found on a stone house door.</MudText>
+            <MudText Typo="Typo.body2">This photo was taken in a small village in Åland.</MudText>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Text" Color="Color.Primary">Share</MudButton>
+            <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
+        </MudCardActions>
+    </MudCard>
+
+</div>
+
+@* <div id="newsCarousel">
+    <MudCarousel Class="mud-width-small" Style="height:200px;" ShowArrows="@arrows" ShowBullets="@bullets" EnableSwipeGesture="@enableSwipeGesture" AutoCycle="@autocycle" TData="object">
+        <MudCarouselItem Transition="transition" Color="@Color.Primary">
+            <div class="d-flex" style="height:100%">
+                <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+            </div>
+        </MudCarouselItem>
+        <MudCarouselItem Transition="transition" Color="@Color.Secondary">
+            <div class="d-flex" style="height:100%">
+                <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+            </div>
+        </MudCarouselItem>
+        <MudCarouselItem Transition="transition">
+            <div class="d-flex" style="height:100%">
+                <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Color="@Color.Primary" Size="@Size.Large" />
+            </div>
+        </MudCarouselItem>
+    </MudCarousel>
+
+</div> *@
+@code {
+    private bool arrows = true;
+    private bool bullets = false;
+    private bool enableSwipeGesture = true;
+    private bool autocycle = true;
+    private Transition transition = Transition.Fade;
+
+    List<ProductDTO> products = new();
+    List<ProductDTO> filteredProducts = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+
+    void UpdateFilteredProducts(string searchTerm)
+    {
+
+    }
+}

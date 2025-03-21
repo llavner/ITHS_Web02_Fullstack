@@ -3,61 +3,150 @@
 @using Core.Services
 @using Core.DTOs
 @using Core.Entites
+@using System.ComponentModel.DataAnnotations
+@using System.Text.RegularExpressions
 @inject ProductService productService
+@inject CategoryService categoryService
 
-<div class="d-flex flex-row justify-center">
+<div id="Forms" class="d-flex flex-column gap-4 justify-space-between">
 
-    @* <MudContainer MaxWidth="MaxWidth.Small" Style="margin">
-        <MudForm>
-            <MudTextField @bind-Value="Name" Label="Product Name" Required="true" />
-            <MudTextField @bind-Value="Price" Label="Price" Required="true" Type="number" />
-            <MudTextField @bind-Value="Stock" Label="Stock" Required="true" Type="number" />
-            <MudTextField @bind-Value="Description" Label="Description" />
-            <MudTextField @bind-Value="Category" Label="Category" />
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SubmitForm">Submit</MudButton>
-        </MudForm>
-    </MudContainer> *@
+    <MudGrid>
+        <MudItem xs="12" sm="4">
+            <MudPaper Class="pa-4">
+                <MudForm Model="@productDto" @ref="form" @bind-IsValid="@formSuccess">
 
-    <MudDataGrid Items="@products" Filterable="false" SortMode="@SortMode.None" Groupable="false">
-        <Columns>
-            <PropertyColumn Property="x => x.Name" />
-            <PropertyColumn Property="x => x.Price" />
-            <PropertyColumn Property="x => x.StockQuantity" Title="Stock Quantity" />
-            <PropertyColumn Property="x => x.IsProductAvailable" Title="Discontinued" />
-            <PropertyColumn Property="x => x.Category.CategoryName" />
-            <TemplateColumn CellClass="justify-content">
-                <CellTemplate>
-                    <MudStack Row>
-                        <MudIcon @onclick="@(()=>Edit())" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
-                        <MudIcon @onclick="@(()=>Delete())" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
-                    </MudStack>
-                </CellTemplate>
-            </TemplateColumn>
-        </Columns>
-    </MudDataGrid>
+                    <MudTextField @bind-Value="productDto.Name" T="string" Label="Product Name" />
+                    <MudTextField @bind-Value="productDto.Price" T="decimal" Label="Price" />
+                    <MudTextField @bind-Value="productDto.StockQuantity" T="int" Label="Stock" />
+                    <MudSelect T="CategoryDTO" Label="Select Category" @bind-Value="selectedCategory">
+                        @foreach (var category in categories)
+                        {
+                            <MudSelectItem T="CategoryDTO" Value="category">@category.Name</MudSelectItem>
+                        }
+                    </MudSelect>
+                    <MudSwitch @bind-Value="productDto.IsProductAvailable" Label="Available" Color="Color.Success" UncheckedColor="Color.Error" />
 
 
+                    <div class="d-flex align-center justify-space-between">
+                        <MudButton Style="margin: 10px" Size="Size.Small" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!formSuccess)" Class="ml-auto" OnClick="@SubmitProduct">Submit</MudButton>
+                    </div>
+                </MudForm>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="4">
+            <MudPaper Class="pa-4">
+                <MudForm Model="@categoryDto" @ref="form" @bind-IsValid="@formSuccess">
+                    <MudTextField @bind-Value="categoryDto.Name" T="string" Label="Category Name" />
+                    <div class="d-flex align-center justify-space-between align-items-center">
+                        <MudButton Style="margin: 10px" Size="Size.Small" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!formSuccess)" Class="ml-auto" OnClick="@SubmitCategory">Submit</MudButton>
+                    </div>
+                </MudForm>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="6">
+            <MudDataGrid Items="@products" Filterable="false" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column">
+                <Columns>
+                    <PropertyColumn Property="x => x.Name" Title="Product Name"/>
+                    <PropertyColumn Property="x => x.Price" />
+                    <PropertyColumn Property="x => x.StockQuantity" Title="Stock" />
+                    <PropertyColumn Property="x => x.IsProductAvailable" Title="Available" />
+                    <PropertyColumn Property="x => x.Category.Name" Title="Category" />
+                    <TemplateColumn CellClass="justify-content">
+                        <CellTemplate>
+                            <MudStack Row>
+                                <MudIcon @onclick="@(()=>EditProduct(context.Item.Id))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"/>
+                                <MudIcon @onclick="@(()=>DeleteProduct(context.Item.Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small"/>
+                            </MudStack>
+                        </CellTemplate>
+                    </TemplateColumn>
+                </Columns>
+            </MudDataGrid>
+        </MudItem>
+
+        <MudItem xs="12" sm="6">
+            <MudDataGrid Items="@categories" Filterable="false" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column">
+                <Columns>
+                    <PropertyColumn Property="x => x.Name" />
+                    <TemplateColumn CellClass="justify-content">
+                        <CellTemplate>
+                            <MudStack Row>
+                                <MudIcon @onclick="@(()=>EditCategory(context.Item.Id))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"/>
+                                <MudIcon @onclick="@(()=>DeleteCategory(context.Item.Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small"/>
+                            </MudStack>
+                        </CellTemplate>
+                    </TemplateColumn>
+                </Columns>
+            </MudDataGrid>
+        </MudItem>
+    </MudGrid>
 </div>
+
+
 @code {
-    
     public IEnumerable<ProductDTO> products;
+    public IEnumerable<CategoryDTO> categories = Enumerable.Empty<CategoryDTO>();
+
+    private ProductDTO productDto = new() { Category = new Category() { Id = 0, Name = string.Empty } };
+    private CategoryDTO categoryDto = new();
+    private CategoryDTO selectedCategory;
+    bool formSuccess;
+    MudForm form;
+
 
     protected override async Task OnInitializedAsync()
     {
-        await GetAllAsync();
+        await ListCategories();
+        await ListProducts();
     }
 
-    public async Task GetAllAsync()
+    public async Task ListProducts()
     {
-        products = await productService.GetAllProductsAsync();
+        products = await productService.GetAllAsync();
     }
 
-    public void Edit()
+    public async Task ListCategories()
+    {
+        categories = await categoryService.GetAllAsync();
+    }
+
+
+
+    private async Task SubmitProduct()
+    {
+        productDto.Category.Name = selectedCategory.Name;
+        await productService.PostAsync(productDto);
+        await ListProducts();
+
+    }
+
+    private async Task SubmitCategory()
+    {
+        
+        await categoryService.AddCategoryAsync(categoryDto);
+        await ListCategories();
+    }
+
+    public async Task EditProduct(int productId)
     {
 
     }
-    public void Delete()
+
+    public async Task EditCategory(int categoryId)
     {
 
+    }
+
+    public async Task DeleteProduct(int productId)
+    {
+        await productService.DeleteAsync(productId);
+        await ListProducts();
+    }
+
+    public async Task DeleteCategory(int categoryId)
+    {
+        await categoryService.DeleteAsync(categoryId);
+        await ListCategories();
     }
 }

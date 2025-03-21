@@ -1,3 +1,4 @@
+using Core.DTOs;
 using Core.Entites;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -33,16 +34,29 @@ public class ProductController(IProductRepository productRepository) : Controlle
 
     // POST api/<ProductController>
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] Product product)
+    public async Task<IActionResult> Post([FromBody] ProductDTO productDto)
     {
-        if (string.IsNullOrWhiteSpace(product.Name))
+        //if (string.IsNullOrWhiteSpace(productDto.Name))
+        //{
+        //    return BadRequest(new { message = "Value can not be empty" });
+        //}
+
+        var product = new Product
         {
-            return BadRequest(new { message = "Value can not be empty" });
-        }
-        
+            Name = productDto.Name,
+            Price = productDto.Price,
+            StockQuantity = productDto.StockQuantity,
+            IsProductAvailable = productDto.IsProductAvailable,
+            Category = productDto.Category,
+            CategoryId = productDto.CategoryId
+        };
+
         await _productRepository.AddAsync(product);
 
         return Ok(new { message = $"Added Product {product.Name}", product });
+
+
+
     }
 
     // PUT api/<ProductController>/5

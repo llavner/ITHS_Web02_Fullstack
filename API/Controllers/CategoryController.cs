@@ -34,14 +34,14 @@ public class CategoryController(ICatogoryRepository categoryRepository) : Contro
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] Category category)
     {
-        if (string.IsNullOrWhiteSpace(category.CategoryName))
+        if (string.IsNullOrWhiteSpace(category.Name))
         {
             return BadRequest(new { message = "Value can not be empty" });
         }
 
         await _categoryRepository.AddAsync(category);
 
-        return Ok(new { message = $"Added category {category.CategoryName}", category });
+        return Ok(new { message = $"Added category {category.Name}", category });
     }
 
     // PUT api/<CategoryController>/5
@@ -68,7 +68,7 @@ public class CategoryController(ICatogoryRepository categoryRepository) : Contro
         else
         {
             await _categoryRepository.DeleteAsync(id);
-            return Ok(new { message = $"{category.CategoryName} deleted." });
+            return Ok(new { message = $"{category.Name} deleted." });
 
         }
     }

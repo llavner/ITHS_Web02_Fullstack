@@ -2,76 +2,103 @@
 @using Core.DTOs
 @rendermode InteractiveServer
 
-<MudAppBar Color="Color.Primary" Fixed="true">
+<link href="css/footer.css" rel="stylesheet"/>
 
-        <div style="display: flex; align-items: center; justify-content: space-between">
-            <MudAvatar Size="Size.Large" Src="" Alt="Company Logo" />
-            <MudText Typo="Typo.h6" Class="ml-2">Record Store</MudText>
+<div class="container">
+
+    <div id="appBar" class="d-flex">
+        <MudAppBar Color="Color.Primary" Fixed="true">
+            <div style="display: flex; align-items: center; justify-content: space-between">
+                <MudAvatar Size="Size.Large" Src="" Alt="Company Logo" />
+                <MudText Typo="Typo.h6" Class="ml-2">Record Store</MudText>
+            </div>
+
+            <div style="flex-grow: 1; display: flex; justify-content: center;">
+                <SearchBar Items="products" OnSearch="UpdateFilteredProducts"></SearchBar>
+            </div>
+
+            <div style="display: flex; align-items: center;">
+                <MudIconButton Icon="@Icons.Material.Filled.Person" Color="Color.Tertiary" Size="Size.Large" />
+                <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" Color="Color.Info" Size="Size.Large" />
+            </div>
+        </MudAppBar>
+    </div>
+
+    <div id="cardArray" class="d-flex justify-content-center" style="margin-top: 64px;">
+        <MudGrid Style="margin:10px; gap:10px; align-items:center">
+            <MudCard Style="width:15rem">
+                <MudCardMedia Image="images/test.webp" Height="200" />
+                <MudCardContent>
+                    <MudText Typo="Typo.h5">Record 1</MudText>
+                    <MudText Typo="Typo.body2">Groovey music from the 70s.</MudText>
+                    <MudText Typo="Typo.body2">For drug using hippies only.</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary">Buy</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudGrid>
+        <MudGrid Style="margin:10px; gap:10px; align-items:center">
+            <MudCard Style="width:15rem">
+                <MudCardMedia Image="images/test.webp" Height="200" />
+                <MudCardContent>
+                    <MudText Typo="Typo.h5">Record 2</MudText>
+                    <MudText Typo="Typo.body2">Filthy heavymetal</MudText>
+                    <MudText Typo="Typo.body2">Metal for the degenrated youth.</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary">Buy</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudGrid>
+        <MudGrid Style="margin:10px; gap:10px; align-items:center">
+            <MudCard Style="width:15rem">
+                <MudCardMedia Image="images/test.webp" Height="200" />
+                <MudCardContent>
+                    <MudText Typo="Typo.h5">Record 3</MudText>
+                    <MudText Typo="Typo.body2">Pretentious Prog-Rock</MudText>
+                    <MudText Typo="Typo.body2">For people who wear socks in sandals.</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary">Buy</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudGrid>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-container">
+        <div class="footer-section">
+            <h4>Service</h4>
+            <ul>
+                <li><a href="/customer-support">Customer Support</a></li>
+                <li><a href="/faq">FAQ</a></li>
+                <li><a href="/shipping-info">Shipping Information</a></li>
+                <li><a href="/returns">Returns & Exchanges</a></li>
+            </ul>
         </div>
-
-        <div style="flex-grow: 1; display: flex; justify-content: center;">
-            <SearchBar Items="products" OnSearch="UpdateFilteredProducts"></SearchBar>
+        <div class="footer-section">
+            <h4>Legal</h4>
+            <ul>
+                <li><a href="/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/terms-of-service">Terms of Service</a></li>
+                <li><a href="/cookie-policy">Cookie Policy</a></li>
+                <li><a href="/legal-notice">Legal Notice</a></li>
+            </ul>
         </div>
-
-        <div style="display: flex; align-items: center;">
-            <MudMenu Dense Variant="Variant.Text" Size="Size.Large" Color="Color.Inherit" Icon="@Icons.Material.Filled.Store">
-                <MudMenuItem Href="/" ForceLoad Icon="@Icons.Material.TwoTone.Login" IconColor="Color.Primary" Label="Log in" />
-                <MudDivider />
-                <MudMenuItem Href="/" ForceLoad Icon="@Icons.Material.TwoTone.Logout" IconColor="Color.Primary" Label="Sign Out" />
-            </MudMenu>
+        <div class="footer-section">
+           <h4>About Us</h4>
+            <ul>
+                <li><a href="/about">Our Story</a></li>
+                <li><a href="/team">Meet the Team</a></li>
+                <li><a href="/careers">Careers</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+            </ul>
         </div>
-    </MudAppBar>
-
-<div id="cardArray">
-
-    <MudCard>
-        <MudCardMedia Image="images/door.jpg" Height="200" />
-        <MudCardContent>
-            <MudText Typo="Typo.h5">Old Paint</MudText>
-            <MudText Typo="Typo.body2">Old paint found on a stone house door.</MudText>
-            <MudText Typo="Typo.body2">This photo was taken in a small village in Istra Croatia.</MudText>
-        </MudCardContent>
-        <MudCardActions>
-            <MudButton Variant="Variant.Text" Color="Color.Primary">Share</MudButton>
-            <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
-        </MudCardActions>
-    </MudCard>
-
-    <MudCard>
-        <MudCardMedia Image="images/door.jpg" Height="200" />
-        <MudCardContent>
-            <MudText Typo="Typo.h5">New Paint</MudText>
-            <MudText Typo="Typo.body2">New paint found on a stone house door.</MudText>
-            <MudText Typo="Typo.body2">This photo was taken in a small village in Åland.</MudText>
-        </MudCardContent>
-        <MudCardActions>
-            <MudButton Variant="Variant.Text" Color="Color.Primary">Share</MudButton>
-            <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
-        </MudCardActions>
-    </MudCard>
-
+    </div>
+</footer>
 </div>
 
-@* <div id="newsCarousel">
-    <MudCarousel Class="mud-width-small" Style="height:200px;" ShowArrows="@arrows" ShowBullets="@bullets" EnableSwipeGesture="@enableSwipeGesture" AutoCycle="@autocycle" TData="object">
-        <MudCarouselItem Transition="transition" Color="@Color.Primary">
-            <div class="d-flex" style="height:100%">
-                <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
-            </div>
-        </MudCarouselItem>
-        <MudCarouselItem Transition="transition" Color="@Color.Secondary">
-            <div class="d-flex" style="height:100%">
-                <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
-            </div>
-        </MudCarouselItem>
-        <MudCarouselItem Transition="transition">
-            <div class="d-flex" style="height:100%">
-                <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Color="@Color.Primary" Size="@Size.Large" />
-            </div>
-        </MudCarouselItem>
-    </MudCarousel>
-
-</div> *@
 @code {
     private bool arrows = true;
     private bool bullets = false;

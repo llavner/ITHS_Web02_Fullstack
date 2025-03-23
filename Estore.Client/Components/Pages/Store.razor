@@ -2,11 +2,11 @@
 @using Core.DTOs
 @rendermode InteractiveServer
 
-<link href="css/footer.css" rel="stylesheet"/>
+<link href="css/footer.css" rel="stylesheet" />
 
 <div class="container">
 
-    <div id="appBar" class="d-flex">
+    @* <div id="appBar" class="d-flex"> *@
         <MudAppBar Color="Color.Primary" Fixed="true">
             <div style="display: flex; align-items: center; justify-content: space-between">
                 <MudAvatar Size="Size.Large" Src="" Alt="Company Logo" />
@@ -19,10 +19,40 @@
 
             <div style="display: flex; align-items: center;">
                 <MudIconButton Icon="@Icons.Material.Filled.Person" Color="Color.Tertiary" Size="Size.Large" />
-                <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" Color="Color.Info" Size="Size.Large" />
+                <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" Color="Color.Info" OnClick="@ToggleOpen" Size="Size.Large" />
             </div>
         </MudAppBar>
-    </div>
+    @* </div> *@
+
+    <!-- Shopping Cart -->
+    <MudPopover Open="@_open" Fixed="true" Class="pt-4" AnchorOrigin="Origin.TopRight" TransformOrigin="Origin.CenterRight">
+        <div class="d-flex flex-column" style="justify-content:center">
+            <!-- Title -->
+            <MudText Typo="Typo.h6" Align="Align.Center">Shopping Cart</MudText>
+            <MudDivider />
+
+            <!-- Shopping Cart Items -->
+            <div class="shoppingcart-list" style="margin: 1rem">
+                @foreach (var item in shoppingCartItems)
+                {
+                    <div class="d-flex flex-row align-items-center mb-2">
+                        <MudText Style="margin-right: 40px">@item.Name</MudText>
+                        <MudText Class="ml-auto" Style="margin-right: 10px">@item.Price</MudText>
+                        <MudIconButton Icon="@Icons.Material.Filled.Add" Size="Size.Small"/>
+                        <MudIconButton Icon="@Icons.Material.Filled.Remove" Size="Size.Small" />
+                    </div>
+                }
+            </div>
+
+            <MudDivider />
+
+            <!-- Buttons -->
+            <div class="d-flex flex-row">
+                <MudButton OnClick="@CheckOut" Class="ml-auto mr-2 mb-1" Color="Color.Success">Check out</MudButton>
+                <MudButton OnClick="@ToggleOpen" Class="mr-2 mb-1" Color="Color.Error">Close</MudButton>
+            </div>
+        </div>
+    </MudPopover>
 
     <div id="cardArray" class="d-flex justify-content-center" style="margin-top: 64px;">
         <MudGrid Style="margin:10px; gap:10px; align-items:center">
@@ -64,54 +94,79 @@
                 </MudCardActions>
             </MudCard>
         </MudGrid>
+        <MudGrid Style="margin:10px; gap:10px; align-items:center">
+            <MudCard Style="width:15rem">
+                <MudCardMedia Image="images/test.webp" Height="200" />
+                <MudCardContent>
+                    <MudText Typo="Typo.h5">Record 4</MudText>
+                    <MudText Typo="Typo.body2">Juvenile Rap</MudText>
+                    <MudText Typo="Typo.body2">Grown men rapping to kids about "cool" stuff.</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary">Buy</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudGrid>
     </div>
 
-    <footer class="footer">
-    <div class="footer-container">
-        <div class="footer-section">
-            <h4>Service</h4>
-            <ul>
-                <li><a href="/customer-support">Customer Support</a></li>
-                <li><a href="/faq">FAQ</a></li>
-                <li><a href="/shipping-info">Shipping Information</a></li>
-                <li><a href="/returns">Returns & Exchanges</a></li>
-            </ul>
+    <MudItem Class="mt-4">
+        <div class="d-flex  flex-column">
+        <!-- Links Section -->
+        <div class="d-flex mb-2">
+            <MudLink Href="/contact" Class="mr-3">Contact</MudLink>
+            <MudLink Href="/privacy" Class="mr-3">Privacy Policy</MudLink>
         </div>
-        <div class="footer-section">
-            <h4>Legal</h4>
-            <ul>
-                <li><a href="/privacy-policy">Privacy Policy</a></li>
-                <li><a href="/terms-of-service">Terms of Service</a></li>
-                <li><a href="/cookie-policy">Cookie Policy</a></li>
-                <li><a href="/legal-notice">Legal Notice</a></li>
-            </ul>
+        
+        <!-- Social Media Icons -->
+        <div class="d-flex mb-3">
+            <MudIconButton Icon="@Icons.Custom.Brands.Facebook" Color="Color.Primary" Class="mr-2" />
+                <MudIconButton Icon="@Icons.Custom.Brands.Twitter" Color="Color.Primary" Class="mr-2" />
+                <MudIconButton Icon="@Icons.Custom.Brands.Instagram" Color="Color.Primary" Class="mr-2" />
+                <MudIconButton Icon="@Icons.Custom.Brands.YouTube" Color="Color.Primary" Class="mr-2" />
         </div>
-        <div class="footer-section">
-           <h4>About Us</h4>
-            <ul>
-                <li><a href="/about">Our Story</a></li>
-                <li><a href="/team">Meet the Team</a></li>
-                <li><a href="/careers">Careers</a></li>
-                <li><a href="/contact">Contact Us</a></li>
-            </ul>
-        </div>
+        
+        <!-- Footer Information -->
+        <MudText Typo="Typo.body2" Align="Align.Center">
+            © 2025 Record Store. All rights reserved.
+        </MudText>
+        <MudText Typo="Typo.body2" Align="Align.Center">
+            Designed by Marcus Renvall
+        </MudText>
+
     </div>
-</footer>
-</div>
+ </MudItem>
+ </div>
+
+
 
 @code {
-    private bool arrows = true;
-    private bool bullets = false;
-    private bool enableSwipeGesture = true;
-    private bool autocycle = true;
-    private Transition transition = Transition.Fade;
 
     List<ProductDTO> products = new();
     List<ProductDTO> filteredProducts = new();
+    List<ProductDTO> shoppingCartItems = new();
+
+
+    // Cart
+    private bool _open;
+    private void ToggleOpen() => _open = !_open;
+
+    private void CheckOut()
+    {
+
+    }
+
+
 
     protected override async Task OnInitializedAsync()
     {
+        var item1 = new ProductDTO { Name = "Iron Maiden", Price = 199 };
+        var item2 = new ProductDTO { Name = "Black Sabbath", Price = 299 };
+        var item3 = new ProductDTO { Name = "Angel Witch", Price = 99 };
 
+        shoppingCartItems.Add(item1);
+        shoppingCartItems.Add(item2);
+        shoppingCartItems.Add(item3);
+        
     }
 
     void UpdateFilteredProducts(string searchTerm)

@@ -5,6 +5,7 @@
 @using Core.Entites
 @using System.ComponentModel.DataAnnotations
 @using System.Text.RegularExpressions
+@using MudBlazor.Charts
 @inject ProductService productService
 @inject CategoryService categoryService
 
@@ -25,13 +26,34 @@
                         }
                     </MudSelect>
                     <MudSwitch @bind-Value="productDto.IsProductAvailable" Label="Available" Color="Color.Success" UncheckedColor="Color.Error" />
-
-
                     <div class="d-flex align-center justify-space-between">
                         <MudButton Style="margin: 10px" Size="Size.Small" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!formSuccess)" Class="ml-auto" OnClick="@SubmitProduct">Submit</MudButton>
                     </div>
                 </MudForm>
             </MudPaper>
+        </MudItem>
+
+
+
+        <MudItem xs="12" sm="6">
+            <MudDataGrid T="ProductDTO" Items="@products" Filterable="false" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column" ReadOnly="false"
+            EditMode="DataGridEditMode.Form">
+                <Columns>
+                    <PropertyColumn Property="x => x.Name" Title="Product Name"/>
+                    <PropertyColumn Property="x => x.Price" />
+                    <PropertyColumn Property="x => x.StockQuantity" Title="Stock" />
+                    <PropertyColumn Property="x => x.IsProductAvailable" Title="Available" />
+                    <PropertyColumn Property="x => x.Category.Name" Title="Category" />
+                    <TemplateColumn CellClass="justify-content">
+                        <CellTemplate>
+                            <MudStack Row>
+                                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" />
+                                <MudIconButton @onclick="@(()=>DeleteProduct(context.Item.Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small"/>
+                            </MudStack>
+                        </CellTemplate>
+                    </TemplateColumn>
+                </Columns>
+            </MudDataGrid>
         </MudItem>
 
         <MudItem xs="12" sm="4">
@@ -46,34 +68,15 @@
         </MudItem>
 
         <MudItem xs="12" sm="6">
-            <MudDataGrid Items="@products" Filterable="false" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column">
+            <MudDataGrid T="CategoryDTO" Items="@categories" Filterable="false" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column" ReadOnly="false"
+            EditMode="DataGridEditMode.Form" StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges">
                 <Columns>
-                    <PropertyColumn Property="x => x.Name" Title="Product Name"/>
-                    <PropertyColumn Property="x => x.Price" />
-                    <PropertyColumn Property="x => x.StockQuantity" Title="Stock" />
-                    <PropertyColumn Property="x => x.IsProductAvailable" Title="Available" />
-                    <PropertyColumn Property="x => x.Category.Name" Title="Category" />
+                    <PropertyColumn Property="x => x.Name" Title="Category Name"/>
                     <TemplateColumn CellClass="justify-content">
                         <CellTemplate>
                             <MudStack Row>
-                                <MudIcon @onclick="@(()=>EditProduct(context.Item.Id))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"/>
-                                <MudIcon @onclick="@(()=>DeleteProduct(context.Item.Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small"/>
-                            </MudStack>
-                        </CellTemplate>
-                    </TemplateColumn>
-                </Columns>
-            </MudDataGrid>
-        </MudItem>
-
-        <MudItem xs="12" sm="6">
-            <MudDataGrid Items="@categories" Filterable="false" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column">
-                <Columns>
-                    <PropertyColumn Property="x => x.Name" />
-                    <TemplateColumn CellClass="justify-content">
-                        <CellTemplate>
-                            <MudStack Row>
-                                <MudIcon @onclick="@(()=>EditCategory(context.Item.Id))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"/>
-                                <MudIcon @onclick="@(()=>DeleteCategory(context.Item.Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small"/>
+                                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" />
+                                <MudIconButton @onclick="@(()=>DeleteCategory(context.Item.Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small"/>
                             </MudStack>
                         </CellTemplate>
                     </TemplateColumn>
@@ -88,9 +91,14 @@
     public IEnumerable<ProductDTO> products;
     public IEnumerable<CategoryDTO> categories = Enumerable.Empty<CategoryDTO>();
 
+
+
     private ProductDTO productDto = new() { Category = new Category() { Id = 0, Name = string.Empty } };
     private CategoryDTO categoryDto = new();
     private CategoryDTO selectedCategory;
+
+    private List<string> _events = new();
+
     bool formSuccess;
     MudForm form;
 
@@ -99,6 +107,23 @@
     {
         await ListCategories();
         await ListProducts();
+    }
+
+    // Category events
+    void StartedEditingItem(CategoryDTO item)
+    {
+        _events.Insert(0, $"Event = StartedEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+    void CanceledEditingItem(CategoryDTO item)
+    {
+        _events.Insert(0, $"Event = CanceledEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+    async Task CommittedItemChanges(CategoryDTO item)
+    {
+        _events.Insert(0, $"Event = CommittedItemChanges, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+        await EditCategory(item.Id, item);
     }
 
     public async Task ListProducts()
@@ -123,7 +148,7 @@
 
     private async Task SubmitCategory()
     {
-        
+
         await categoryService.AddCategoryAsync(categoryDto);
         await ListCategories();
     }
@@ -133,9 +158,10 @@
 
     }
 
-    public async Task EditCategory(int categoryId)
+    public async Task EditCategory(int categoryId, CategoryDTO updatedCategory)
     {
-
+        await categoryService.UpdateCategoryAsync(categoryId, updatedCategory);
+        await ListCategories();
     }
 
     public async Task DeleteProduct(int productId)

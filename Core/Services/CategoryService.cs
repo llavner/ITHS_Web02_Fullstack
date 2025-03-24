@@ -28,6 +28,13 @@ public class CategoryService(HttpClient http)
         return await response.Content.ReadFromJsonAsync<CategoryDTO>();
     }
 
+    public async Task<CategoryDTO> UpdateCategoryAsync(int categoryId, CategoryDTO updatedCategory)
+    {
+        var response = await _http.PutAsJsonAsync($"https://localhost:7120/api/Category{categoryId}", updatedCategory);
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadFromJsonAsync<CategoryDTO>();
+    }
     public async Task<CategoryDTO> DeleteAsync(int categoryId)
     {
         var response = await _http.DeleteAsync($"https://localhost:7120/api/Category/{categoryId}");

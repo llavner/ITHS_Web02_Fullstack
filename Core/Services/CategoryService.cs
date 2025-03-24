@@ -30,7 +30,7 @@ public class CategoryService(HttpClient http)
 
     public async Task<CategoryDTO> UpdateCategoryAsync(int categoryId, CategoryDTO updatedCategory)
     {
-        var response = await _http.PutAsJsonAsync($"https://localhost:7120/api/Category{categoryId}", updatedCategory);
+        var response = await _http.PutAsJsonAsync($"https://localhost:7120/api/Category/{categoryId}", updatedCategory);
         response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadFromJsonAsync<CategoryDTO>();

@@ -47,7 +47,6 @@ public class ProductController(IProductRepository productRepository) : Controlle
             Price = productDto.Price,
             StockQuantity = productDto.StockQuantity,
             IsProductAvailable = productDto.IsProductAvailable,
-            Category = productDto.Category,
             CategoryId = productDto.CategoryId
         };
 

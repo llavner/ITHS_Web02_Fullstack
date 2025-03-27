@@ -19,12 +19,21 @@
                     <MudTextField @bind-Value="productDto.Name" T="string" Label="Product Name" />
                     <MudTextField @bind-Value="productDto.Price" T="decimal" Label="Price" />
                     <MudTextField @bind-Value="productDto.StockQuantity" T="int" Label="Stock" />
-                    <MudSelect T="CategoryDTO" Label="Select Category" @bind-Value="selectedCategory">
+
+                    @* <MudSelect T="int" Label="Select Category" @bind-Value="selectedCategory.Id">
                         @foreach (var category in categories)
                         {
-                            <MudSelectItem T="CategoryDTO" Value="category">@category.Name</MudSelectItem>
+                            <MudSelectItem Value="category.Id">@category.Name</MudSelectItem>
+                        }
+                    </MudSelect> *@
+
+                    <MudSelect T="int" Label="Select Category" @bind-Value="productDto.CategoryId">
+                        @foreach (var category in categories)
+                        {
+                            <MudSelectItem T="int" Value="category.Id">@category.Name</MudSelectItem>
                         }
                     </MudSelect>
+
                     <MudSwitch @bind-Value="productDto.IsProductAvailable" Label="Available" Color="Color.Success" UncheckedColor="Color.Error" />
                     <div class="d-flex align-center justify-space-between">
                         <MudButton Style="margin: 10px" Size="Size.Small" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!formSuccess)" Class="ml-auto" OnClick="@SubmitProduct">Submit</MudButton>
@@ -140,7 +149,7 @@
 
     private async Task SubmitProduct()
     {
-        productDto.Category.Name = selectedCategory.Name;
+       
         await productService.PostAsync(productDto);
         await ListProducts();
 

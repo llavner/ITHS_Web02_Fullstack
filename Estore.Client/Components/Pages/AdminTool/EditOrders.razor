@@ -1,0 +1,66 @@
+﻿@page "/editorders"
+@rendermode InteractiveServer
+@using Core.DTOs
+@using Core.Entites
+@using Core.Services
+@using System.ComponentModel.DataAnnotations
+@using System.Text.RegularExpressions
+@using MudBlazor.Charts
+
+<div class="d-flex flex-row gap-10">
+    <MudItem xs="12" sm="6">
+        <MudDataGrid T="OrderDTO" Items="@orders" Filterable="false" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column" ReadOnly="false"
+                     EditMode="DataGridEditMode.Form" StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges">
+            <Columns>
+                <PropertyColumn Property="x => x.Id" Title="Order Id" />
+                <PropertyColumn Property="x => x.CustomerId" Title="Customer" />
+                <PropertyColumn Property="x => x.OrderDetailId" Title="Order"/>
+                <PropertyColumn Property="x => x.OrderDate" Title="Date"/>
+                <PropertyColumn Property="x => x.Status" Title="Status" />
+                <TemplateColumn CellClass="justify-content">
+                    <CellTemplate>
+                        <MudStack Row>
+                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" />
+                            <MudIconButton @onclick="@(()=>DeleteCustomer(context.Item.Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" />
+                        </MudStack>
+                    </CellTemplate>
+                </TemplateColumn>
+            </Columns>
+        </MudDataGrid>
+    </MudItem>
+</div>
+
+@code {
+    public IEnumerable<CustomerDTO> customers;
+    public IEnumerable<OrderDTO> orders = Enumerable.Empty<OrderDTO>();
+
+    private CustomerDTO customerDto = new(); /* { Order = new Order() { Id = 0, Name = string.Empty, OrderDetailsId = 0 } }; */
+    private OrderDTO selectedOrder;
+
+    private List<string> _events = new();
+
+    bool formSuccess;
+    MudForm form;
+
+    // Order events
+    void StartedEditingItem(OrderDTO item)
+    {
+        _events.Insert(0, $"Event = StartedEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+    void CanceledEditingItem(OrderDTO item)
+    {
+        _events.Insert(0, $"Event = CanceledEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+    async Task CommittedItemChanges(OrderDTO item)
+    {
+        _events.Insert(0, $"Event = CommittedItemChanges, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+
+    }
+
+    public async Task DeleteCustomer(int id)
+    {
+
+    }
+}

@@ -2,6 +2,7 @@
 using Core.Interfaces;
 using Data.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace Data.Repositories;
 
@@ -25,7 +26,6 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
         await _context.Products.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
-
     public async Task UpdateAsync(Product entity)
     {
         _context.Products.Update(entity);
@@ -44,5 +44,10 @@ public class ProductRepository(ApplicationDbContext context) : IProductRepositor
 
 
 }
+
+
+
+
+
 
 

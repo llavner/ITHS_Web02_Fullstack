@@ -1,0 +1,41 @@
+﻿@page "/admintool"
+@rendermode InteractiveServer
+@using MudBlazor
+
+<div class="d-flex">
+    <MudAppBar Color="Color.Primary">
+        <MudText Typo="Typo.h6" Class="ml-2">Admin Tools</MudText>
+        <MudButton Color="Color.Secondary" OnClick=@(() => SelectOption("Products"))>Products</MudButton>
+        <MudButton Color="Color.Secondary" OnClick=@(() => SelectOption("Categories"))>Categories</MudButton>
+        <MudButton Color="Color.Secondary" OnClick=@(() => SelectOption("Customers"))>Customers</MudButton>
+        <MudButton Color="Color.Secondary" OnClick=@(() => SelectOption("Orders"))>Orders</MudButton>
+    </MudAppBar>
+</div>
+<div class="content">
+    @if (selectedOption == "Products")
+    {
+        <EditProducts />
+    }
+    else if (selectedOption == "Categories")
+    {
+        <EditCategories />
+    }
+    else if (selectedOption == "Customers")
+    {
+        <EditCustomers />
+    }
+    else if (selectedOption == "Orders")
+    {
+        <EditOrders />
+    }
+</div>
+
+@code {
+    private string selectedOption = "Products";
+
+    private void SelectOption(string option)
+    {
+        selectedOption = option;
+    }
+
+}

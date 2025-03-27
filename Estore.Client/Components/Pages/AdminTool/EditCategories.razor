@@ -1,0 +1,96 @@
+﻿@page "/editcategories"
+@rendermode InteractiveServer
+@using Core.Services
+@using Core.DTOs
+@using Core.Entites
+@using System.ComponentModel.DataAnnotations
+@using System.Text.RegularExpressions
+@using MudBlazor.Charts
+@inject CategoryService categoryService
+
+<div class="d-flex flex-row gap-10">
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-4">
+            <MudForm Model="@categoryDto" @ref="form" @bind-IsValid="@formSuccess">
+                <MudTextField @bind-Value="categoryDto.Name" T="string" Label="Category Name" />
+                <div class="d-flex align-center justify-space-between align-items-center">
+                    <MudButton Style="margin: 10px" Size="Size.Small" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!formSuccess)" Class="ml-auto" OnClick="@CreateCategory">Add</MudButton>
+                </div>
+            </MudForm>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12" sm="6">
+        <MudDataGrid T="CategoryDTO" Items="@categories" Filterable="false" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column" ReadOnly="false"
+                     EditMode="DataGridEditMode.Form" StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges">
+            <Columns>
+                <PropertyColumn Property="x => x.Name" Title="Category Name" />
+                <TemplateColumn CellClass="justify-content">
+                    <CellTemplate>
+                        <MudStack Row>
+                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" />
+                            <MudIconButton @onclick="@(()=>DeleteCategory(context.Item.Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" />
+                        </MudStack>
+                    </CellTemplate>
+                </TemplateColumn>
+            </Columns>
+        </MudDataGrid>
+    </MudItem>
+</div>
+@code {
+    public IEnumerable<ProductDTO> products;
+    public IEnumerable<CategoryDTO> categories = Enumerable.Empty<CategoryDTO>();
+
+    private ProductDTO productDto = new() { Category = new Category() { Id = 0, Name = string.Empty } };
+    private CategoryDTO categoryDto = new();
+    //private CategoryDTO selectedCategory;
+
+    private List<string> _events = new();
+
+    bool formSuccess;
+    MudForm form;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ListCategories();
+    }
+
+    // Category events
+    void StartedEditingItem(CategoryDTO item)
+    {
+        _events.Insert(0, $"Event = StartedEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+    void CanceledEditingItem(CategoryDTO item)
+    {
+        _events.Insert(0, $"Event = CanceledEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+    async Task CommittedItemChanges(CategoryDTO item)
+    {
+        _events.Insert(0, $"Event = CommittedItemChanges, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+        await EditCategory(item.Id, item);
+    }
+
+    public async Task ListCategories()
+    {
+        categories = await categoryService.GetAllAsync();
+    }
+    private async Task CreateCategory()
+    {
+        await categoryService.AddCategoryAsync(categoryDto);
+        await ListCategories();
+    }
+
+    public async Task EditCategory(int categoryId, CategoryDTO updatedCategory)
+    {
+        await categoryService.UpdateCategoryAsync(categoryId, updatedCategory);
+        await ListCategories();
+    }
+
+    public async Task DeleteCategory(int categoryId)
+    {
+        await categoryService.DeleteAsync(categoryId);
+        await ListCategories();
+    }
+}

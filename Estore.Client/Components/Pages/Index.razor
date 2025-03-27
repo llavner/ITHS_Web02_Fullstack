@@ -1,0 +1,142 @@
+﻿@page "/"
+@using Core.DTOs
+@using PageComponents
+@rendermode InteractiveServer
+
+<div class="container">
+
+    <!-- App Bar -->
+   
+    <MudAppBar Color="Color.Primary">
+        <MudAvatar Size="Size.Large" Src="" Alt="Company Logo" />
+        <MudText Typo="Typo.h6" Class="ml-2">The Store</MudText>
+        <MudIconButton Icon="@Icons.Material.Filled.Person" Color="Color.Tertiary" Size="Size.Large" OnClick=@(() => SelectContent("Login")) />
+        <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" Color="Color.Info" OnClick="@ToggleOpen" Size="Size.Large" />
+    </MudAppBar>
+
+    <!-- Content -->
+    <div class="content" style="height: 100vh">
+        @if (selectedContent == "Products")
+        {
+            <Estore.Client.Components.Pages.PageComponents.Products />
+        }
+        else if (selectedContent == "Login")
+        {
+            <Estore.Client.Components.Pages.PageComponents.Login />
+        }
+    </div>
+
+<!-- Footer -->
+    <footer class="bg-light p-1 text-center text-lg-start bg-body-tertiary text-muted fixed-bottom">
+        <!-- Section: Links  -->
+        <section class="">
+            <div class="container text-center text-md-start mt-3">
+                <!-- Grid row -->
+                <div class="row mt-1">
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                        <!-- Content -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            <i class="fas fa-gem"></i>The Store
+                        </h6>
+                        <p>
+                            Here you can use rows and columns to organize your footer content. Lorem ipsum
+                            dolor sit amet, consectetur adipisicing elit.
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            Products
+                        </h6>
+                        <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>CD</MudButton><br />
+                        <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Vinyl</MudButton><br />
+                        <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Hi-Fi</MudButton><br />
+                    </div>
+                    <!-- Grid column -->
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            Useful links
+                        </h6>
+                        <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Pricing</MudButton><br />
+                        <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Settings</MudButton><br />
+                        <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Orders</MudButton><br />
+                    </div>
+                    <!-- Grid column -->
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            Contact
+                        </h6>
+                        <p><i class="fas fa-home"></i> Mjörnvägen 1</p>
+                        <p><i class="fas fa-home"></i> 443 73 Björboholm</p>
+                        <p>
+                            <i class="fas fa-envelope"></i>
+                            info@example.com
+                        </p>
+                    </div>
+                </div>
+                <!-- Grid row -->
+            </div>
+        </section>
+        <!-- Section: Links  -->
+        <!-- Copyright -->
+        <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.05);">
+            © 2025 Copyright:
+            <a class="text-reset fw-bold" href="/">The Store</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
+
+</div>
+
+
+
+@code {
+
+    List<ProductDTO> products = new();
+    List<ProductDTO> filteredProducts = new();
+    List<ProductDTO> shoppingCartItems = new();
+
+    private string selectedContent = "Products";
+
+    private void SelectContent(string option)
+    {
+        selectedContent = option;
+    }
+
+
+
+    // Cart
+    private bool _open;
+    private void ToggleOpen() => _open = !_open;
+
+    private void CheckOut()
+    {
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var item1 = new ProductDTO { Name = "Iron Maiden", Price = 199 };
+        var item2 = new ProductDTO { Name = "Black Sabbath", Price = 299 };
+        var item3 = new ProductDTO { Name = "Angel Witch", Price = 99 };
+
+
+
+        shoppingCartItems.Add(item1);
+        shoppingCartItems.Add(item2);
+        shoppingCartItems.Add(item3);
+
+    }
+
+    void UpdateFilteredProducts(string searchTerm)
+    {
+
+    }
+}

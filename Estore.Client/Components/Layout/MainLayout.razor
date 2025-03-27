@@ -2,8 +2,6 @@
 
 <MudThemeProvider Theme="@_theme" IsDarkMode="_isDarkMode" @rendermode="InteractiveServer" />
 
-@* <MudThemeProvider Theme="CustomTheme" /> *@
-
 <MudPopoverProvider @rendermode="InteractiveServer" />
 
 <MudDialogProvider @rendermode="InteractiveServer" />
@@ -30,27 +28,6 @@
     private bool _drawerOpen = true;
     private bool _isDarkMode = false;
     private MudTheme? _theme = null;
-
-    // private MudTheme CustomTheme = new MudTheme()
-    //     {
-    //         PaletteLight = new PaletteLight()
-    //         {
-    //             Primary = Colors.Blue.Default,
-    //             Secondary = Colors.Green.Accent4,
-    //             AppbarBackground = Colors.Red.Default,
-    //         },
-    //         PaletteDark = new PaletteDark()
-    //         {
-    //             Primary = Colors.Blue.Lighten1
-    //         },
-
-    //         LayoutProperties = new LayoutProperties()
-    //         {
-    //             DrawerWidthLeft = "260px",
-    //             DrawerWidthRight = "300px"
-    //         }
-    //     };
-
 
     protected override void OnInitialized()
     {

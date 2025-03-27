@@ -36,7 +36,13 @@ public class ProductService(HttpClient http)
 
         return await response.Content.ReadFromJsonAsync<ProductDTO>();
     }
+    public async Task<ProductDTO> UpdateProductAsync(int productId, ProductDTO updatedProduct)
+    {
+        var response = await _http.PutAsJsonAsync($"https://localhost:7120/api/Product/{productId}", updatedProduct);
+        response.EnsureSuccessStatusCode();
 
+        return await response.Content.ReadFromJsonAsync<ProductDTO>();
+    }
     public async Task<ProductDTO> DeleteAsync(int productId)
     {
         var response = await _http.DeleteAsync($"https://localhost:7120/api/Product/{productId}");

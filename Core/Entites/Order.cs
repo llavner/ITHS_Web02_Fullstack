@@ -11,7 +11,7 @@ public class Order
     public int Id { get; set; }
     public int CustomerId { get; set; }
     public Customer Customer { get; set; }
-    public int OrderDetailId { get; set; }
+    public int OrderItemId { get; set; }
     public OrderItem OrderItem { get; set; }
     public DateTime OrderDate { get; set; }
     public string Status { get; set; }

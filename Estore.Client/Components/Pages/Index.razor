@@ -1,20 +1,26 @@
 ﻿@page "/"
 @using Core.DTOs
+@using Core.Services
 @using Estore.Client.Components.Pages.PageComponents
 @rendermode InteractiveServer
+@inject ProductService productService
 
-<div class="container">
+<div class="d-flex flex-column min-vh-100">
 
     <!-- App Bar -->
-    
-    <MudAppBar Color="Color.Primary" Fixed="true" Bottom="false">
-        <MudText Typo="Typo.h6" Class="ml-2">Record Store</MudText>
-        <MudIconButton Icon="@Icons.Material.Filled.Person" Edge="Edge.End" Color="Color.Inherit" Size="Size.Medium" OnClick=@(() => SelectContent("Login")) />
-        <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" Edge="Edge.End" Color="Color.Inherit" OnClick="@ToggleOpen" Size="Size.Medium" />
+    <div class="d-flex flex-row">
+    <MudAppBar Color="Color.Primary" Fixed="true">
+        <div class="col-11">
+            <MudText Typo="Typo.h6" Class="ml-2">Record Store</MudText>
+        </div>
+        <div class="col-1">
+            <MudIconButton Icon="@Icons.Material.Filled.Person" Edge="Edge.End" Color="Color.Inherit" Size="Size.Medium" OnClick=@(() => SelectContent("Login")) />
+            <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" Edge="Edge.End" Color="Color.Inherit" OnClick="@ToggleOpen" Size="Size.Medium" />
+        </div>
     </MudAppBar>
-
+    </div>
     <!-- Content -->
-    <div class="content" style="height: 100vh">
+    <div class="content flex-grow-1">
         @if (selectedContent == "Products")
         {
             <Products />
@@ -31,7 +37,75 @@
         <Footer />
     </div> *@
 
-    <footer class="bg-light p-1 text-center text-lg-start bg-body-tertiary text-muted fixed-bottom">
+
+    <footer class="bg-light text-center text-lg-start mt-auto w-100">
+        <!-- Section: Links  -->
+            <div class="container p-4">
+                <!-- Grid row -->
+                <div class="row ">
+                    <!-- Grid column -->
+                    <div class="col-md-4 col-lg-4 col-xl-3 mx-auto mb-4">
+                        <!-- Content -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            <i class="fas fa-gem"></i>Record Store
+                        </h6>
+                        <p>
+                            Here you can use rows and columns to organize your footer content. Lorem ipsum
+                            dolor sit amet, consectetur adipisicing elit.
+                        </p>
+                    </div>
+                    <!-- Grid column -->
+                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            Products
+                        </h6>
+                        <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>CD</MudButton><br />
+                        <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Vinyl</MudButton><br />
+                        <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Casette</MudButton><br />
+                    </div>
+                    <!-- Grid column -->
+                    <!-- Grid column -->
+                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            Useful links
+                        </h6>
+                        <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Pricing</MudButton><br />
+                        <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Settings</MudButton><br />
+                        <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Orders</MudButton><br />
+                    </div>
+                    <!-- Grid column -->
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            Contact
+                        </h6>
+                        <i class="fas fa-home"></i> Mjörnvägen 1
+                        <i class="fas fa-home"></i> 443 73 Björboholm
+                        <i class="fas fa-envelope"></i>info@example.com
+
+                    </div>
+                    <div class="col-md-2 text-end">
+                        <!-- Logo -->
+                        <MudImage Src="images/logo.webp" Alt="Company Logo" Class="img-fluid me-2" style="height: 150px;"></MudImage>
+                    </div>
+                </div>
+                <!-- Grid row -->
+            </div>
+        <!-- Section: Links  -->
+        <!-- Copyright -->
+        <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.05);">
+            © 2025 Copyright:
+            <a class="text-reset fw-bold" href="/">Record Store</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
+
+</div>
+    @* <footer class="bg-light p-1 text-center text-lg-start bg-body-tertiary text-muted" style="margin-top:auto">
         <!-- Section: Links  -->
         <section>
             <div class="container text-center text-md-start mt-3">
@@ -99,20 +173,18 @@
     </footer>
     <!-- Footer -->
 
-</div>
+</div> *@
 
 
 
 @code {
 
-    List<ProductDTO> products = new();
     List<ProductDTO> filteredProducts = new();
     List<ProductDTO> shoppingCartItems = new();
 
-    public static string selectedContent = "Products";
-    //public static string selectedContent { get; set; }
+    public string selectedContent = "Products";
 
-    public static void SelectContent(string option)
+    public void SelectContent(string option)
     {
         selectedContent = option;
         
@@ -124,6 +196,8 @@
     private bool _open;
     private void ToggleOpen() => _open = !_open;
 
+
+    
     private void CheckOut()
     {
 
@@ -131,15 +205,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var item1 = new ProductDTO { Artist = "Iron Maiden", AlbumTitle = "Live after death", Price = 199 };
-        var item2 = new ProductDTO { Artist = "Black Sabbath", AlbumTitle = "S/T", Price = 299 };
-        var item3 = new ProductDTO { Artist = "Angel Witch",  AlbumTitle = "S/T", Price = 99 };
-
-
-
-        shoppingCartItems.Add(item1);
-        shoppingCartItems.Add(item2);
-        shoppingCartItems.Add(item3);
+        
 
     }
 

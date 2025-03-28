@@ -14,10 +14,10 @@
         <MudPaper Class="pa-4">
             <MudForm Model="@productDto" @ref="form" @bind-IsValid="@formSuccess">
 
-                <MudTextField @bind-Value="productDto.Artist" T="string" Label="Artist Name" />
-                <MudTextField @bind-Value="productDto.AlbumTitle" T="string" Label="Album Title" />
-                <MudTextField @bind-Value="productDto.Price" T="decimal" Label="Price" />
-                <MudTextField @bind-Value="productDto.StockQuantity" T="int" Label="Stock" />
+                <MudTextField @bind-Value="productDto.Artist" T="string" Label="Artist" For="@(()=> productDto.Artist)"/>
+                <MudTextField @bind-Value="productDto.AlbumTitle" T="string" Label="Album" For="@(()=> productDto.AlbumTitle)" />
+                <MudTextField @bind-Value="productDto.Price" T="decimal" Label="Price" For="@(()=> productDto.Price)" />
+                <MudTextField @bind-Value="productDto.StockQuantity" T="int" Label="Stock" For="@(()=> productDto.StockQuantity)" />
                 <MudSelect T="CategoryDTO" Label="Select Category" @bind-Value="selectedCategory">
                     @foreach (var category in categories)
                     {
@@ -100,7 +100,7 @@
     }
     private async Task CreateProduct()
     {
-        productDto.Category.Name = selectedCategory.Name;
+        productDto.Category.Id = selectedCategory.Id;
         await productService.PostAsync(productDto);
         await ListProducts();
 

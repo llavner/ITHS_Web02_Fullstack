@@ -1,43 +1,47 @@
 ﻿@page "/"
 @using Core.DTOs
-@using PageComponents
+@using Estore.Client.Components.Pages.PageComponents
 @rendermode InteractiveServer
 
 <div class="container">
 
     <!-- App Bar -->
-   
-    <MudAppBar Color="Color.Primary">
-        <MudAvatar Size="Size.Large" Src="" Alt="Company Logo" />
-        <MudText Typo="Typo.h6" Class="ml-2">The Store</MudText>
-        <MudIconButton Icon="@Icons.Material.Filled.Person" Color="Color.Tertiary" Size="Size.Large" OnClick=@(() => SelectContent("Login")) />
-        <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" Color="Color.Info" OnClick="@ToggleOpen" Size="Size.Large" />
+    
+    <MudAppBar Color="Color.Primary" Fixed="true" Bottom="false">
+        <MudText Typo="Typo.h6" Class="ml-2">Record Store</MudText>
+        <MudIconButton Icon="@Icons.Material.Filled.Person" Edge="Edge.End" Color="Color.Inherit" Size="Size.Medium" OnClick=@(() => SelectContent("Login")) />
+        <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" Edge="Edge.End" Color="Color.Inherit" OnClick="@ToggleOpen" Size="Size.Medium" />
     </MudAppBar>
 
     <!-- Content -->
     <div class="content" style="height: 100vh">
         @if (selectedContent == "Products")
         {
-            <Estore.Client.Components.Pages.PageComponents.Products />
+            <Products />
         }
         else if (selectedContent == "Login")
         {
-            <Estore.Client.Components.Pages.PageComponents.Login />
+            <Login />
         }
     </div>
 
-<!-- Footer -->
+    <!-- Footer -->
+
+    @* <div class="footer">
+        <Footer />
+    </div> *@
+
     <footer class="bg-light p-1 text-center text-lg-start bg-body-tertiary text-muted fixed-bottom">
         <!-- Section: Links  -->
-        <section class="">
+        <section>
             <div class="container text-center text-md-start mt-3">
                 <!-- Grid row -->
                 <div class="row mt-1">
                     <!-- Grid column -->
-                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                    <div class="col-md-4 col-lg-4 col-xl-3 mx-auto mb-4">
                         <!-- Content -->
                         <h6 class="text-uppercase fw-bold mb-4">
-                            <i class="fas fa-gem"></i>The Store
+                            <i class="fas fa-gem"></i>Record Store
                         </h6>
                         <p>
                             Here you can use rows and columns to organize your footer content. Lorem ipsum
@@ -52,11 +56,11 @@
                         </h6>
                         <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>CD</MudButton><br />
                         <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Vinyl</MudButton><br />
-                        <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Hi-Fi</MudButton><br />
+                        <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Casette</MudButton><br />
                     </div>
                     <!-- Grid column -->
                     <!-- Grid column -->
-                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
                         <!-- Links -->
                         <h6 class="text-uppercase fw-bold mb-4">
                             Useful links
@@ -72,22 +76,24 @@
                         <h6 class="text-uppercase fw-bold mb-4">
                             Contact
                         </h6>
-                        <p><i class="fas fa-home"></i> Mjörnvägen 1</p>
-                        <p><i class="fas fa-home"></i> 443 73 Björboholm</p>
-                        <p>
-                            <i class="fas fa-envelope"></i>
-                            info@example.com
-                        </p>
+                        <i class="fas fa-home"></i> Mjörnvägen 1
+                        <i class="fas fa-home"></i> 443 73 Björboholm
+                        <i class="fas fa-envelope"></i>info@example.com
+                        
+                    </div>
+                    <div class="col-md-2 text-end">
+                        <!-- Logo -->
+                        <MudImage Src="images/logo.webp" Alt="Company Logo" Class="img-fluid me-2" style="height: 150px;"></MudImage>
                     </div>
                 </div>
-                <!-- Grid row -->
+                <!-- Grid row --> 
             </div>
         </section>
         <!-- Section: Links  -->
         <!-- Copyright -->
         <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.05);">
             © 2025 Copyright:
-            <a class="text-reset fw-bold" href="/">The Store</a>
+            <a class="text-reset fw-bold" href="/">Record Store</a>
         </div>
         <!-- Copyright -->
     </footer>
@@ -103,11 +109,13 @@
     List<ProductDTO> filteredProducts = new();
     List<ProductDTO> shoppingCartItems = new();
 
-    private string selectedContent = "Products";
+    public static string selectedContent = "Products";
+    //public static string selectedContent { get; set; }
 
-    private void SelectContent(string option)
+    public static void SelectContent(string option)
     {
         selectedContent = option;
+        
     }
 
 
@@ -123,9 +131,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var item1 = new ProductDTO { Name = "Iron Maiden", Price = 199 };
-        var item2 = new ProductDTO { Name = "Black Sabbath", Price = 299 };
-        var item3 = new ProductDTO { Name = "Angel Witch", Price = 99 };
+        var item1 = new ProductDTO { Artist = "Iron Maiden", AlbumTitle = "Live after death", Price = 199 };
+        var item2 = new ProductDTO { Artist = "Black Sabbath", AlbumTitle = "S/T", Price = 299 };
+        var item3 = new ProductDTO { Artist = "Angel Witch",  AlbumTitle = "S/T", Price = 99 };
 
 
 

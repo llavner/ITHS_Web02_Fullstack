@@ -15,5 +15,6 @@ public class Customer
     public required string Address { get; set; }
     public required string PhoneNumber { get; set; }
     public required string PasswordHash { get; set; }
+    public bool IsAdmin { get; set; }
 }
 

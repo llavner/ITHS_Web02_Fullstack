@@ -14,7 +14,8 @@
         <MudPaper Class="pa-4">
             <MudForm Model="@productDto" @ref="form" @bind-IsValid="@formSuccess">
 
-                <MudTextField @bind-Value="productDto.Name" T="string" Label="Product Name" />
+                <MudTextField @bind-Value="productDto.Artist" T="string" Label="Artist Name" />
+                <MudTextField @bind-Value="productDto.AlbumTitle" T="string" Label="Album Title" />
                 <MudTextField @bind-Value="productDto.Price" T="decimal" Label="Price" />
                 <MudTextField @bind-Value="productDto.StockQuantity" T="int" Label="Stock" />
                 <MudSelect T="CategoryDTO" Label="Select Category" @bind-Value="selectedCategory">
@@ -37,7 +38,8 @@
         <MudDataGrid T="ProductDTO" Items="@products" Filterable="false" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column" ReadOnly="false"
                      EditMode="DataGridEditMode.Form" StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges">
             <Columns>
-                <PropertyColumn Property="x => x.Name" Title="Product Name" />
+                <PropertyColumn Property="x => x.Artist" Title="Artist Name" />
+                <PropertyColumn Property="x => x.AlbumTitle" Title="Album Title" />
                 <PropertyColumn Property="x => x.Price" />
                 <PropertyColumn Property="x => x.StockQuantity" Title="Stock" />
                 <PropertyColumn Property="x => x.IsProductAvailable" Title="Available" />

@@ -19,7 +19,8 @@ public class ProductService(HttpClient http)
         return products.Select(p => new ProductDTO
         {
             Id = p.Id,
-            Name = p.Name,
+            Artist = p.Artist,
+            AlbumTitle = p.AlbumTitle,
             Price = p.Price,
             StockQuantity = p.StockQuantity,
             IsProductAvailable = p.IsProductAvailable,

@@ -43,7 +43,8 @@ public class ProductController(IProductRepository productRepository) : Controlle
 
         var product = new Product
         {
-            Name = productDto.Name,
+            Artist = productDto.Artist,
+            AlbumTitle = productDto.AlbumTitle,
             Price = productDto.Price,
             StockQuantity = productDto.StockQuantity,
             IsProductAvailable = productDto.IsProductAvailable,
@@ -52,7 +53,7 @@ public class ProductController(IProductRepository productRepository) : Controlle
 
         await _productRepository.AddAsync(product);
 
-        return Ok(new { message = $"Added Product {product.Name}", product });
+        return Ok(new { message = $"Added Product {product.Artist} {product.AlbumTitle}", product });
 
 
 
@@ -67,7 +68,7 @@ public class ProductController(IProductRepository productRepository) : Controlle
         else
         {
             await _productRepository.UpdateAsync(product);
-            return Ok(new { message = $"{product.Name} has been updated." });
+            return Ok(new { message = $"{product.Id} has been updated." });
         }
 
 
@@ -84,7 +85,7 @@ public class ProductController(IProductRepository productRepository) : Controlle
         else
         {
             await _productRepository.DeleteAsync(id);
-            return Ok(new { message = $"{product.Name} deleted." });
+            return Ok(new { message = $"{product.Id} deleted." });
 
         }
 

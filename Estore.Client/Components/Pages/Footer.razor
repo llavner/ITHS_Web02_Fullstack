@@ -1,0 +1,67 @@
+﻿@using Estore.Client.Components.Pages.PageComponents
+
+<footer class="bg-light p-1 text-center text-lg-start bg-body-tertiary text-muted fixed-bottom">
+    <!-- Section: Links  -->
+    <section class="">
+        <div class="container text-center text-md-start mt-3">
+            <!-- Grid row -->
+            <div class="row mt-1">
+                <!-- Grid column -->
+                <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                    <!-- Content -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        <i class="fas fa-gem"></i>The Store
+                    </h6>
+                    <p>
+                        Here you can use rows and columns to organize your footer content. Lorem ipsum
+                        dolor sit amet, consectetur adipisicing elit.
+                    </p>
+                </div>
+                <!-- Grid column -->
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        Products
+                    </h6>
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => Index.SelectContent("Products"))>CD</MudButton><br />
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => Index.SelectContent("Products"))>Vinyl</MudButton><br />
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => Index.SelectContent("Products"))>Hi-Fi</MudButton><br />
+                </div>
+                <!-- Grid column -->
+                <!-- Grid column -->
+                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        Useful links
+                    </h6>
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => Index.SelectContent("Products"))>Pricing</MudButton><br />
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => Index.SelectContent("Products"))>Settings</MudButton><br />
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => Index.SelectContent("Products"))>Orders</MudButton><br />
+                </div>
+                <!-- Grid column -->
+                <!-- Grid column -->
+                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        Contact
+                    </h6>
+                    <p><i class="fas fa-home"></i> Mjörnvägen 1</p>
+                    <p><i class="fas fa-home"></i> 443 73 Björboholm</p>
+                    <p>
+                        <i class="fas fa-envelope"></i>
+                        info@example.com
+                    </p>
+                </div>
+            </div>
+            <!-- Grid row -->
+        </div>
+    </section>
+    <!-- Section: Links  -->
+    <!-- Copyright -->
+    <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.05);">
+        © 2025 Copyright:
+        <a class="text-reset fw-bold" href="/">The Store</a>
+    </div>
+    <!-- Copyright -->
+</footer>
+<!-- Footer -->

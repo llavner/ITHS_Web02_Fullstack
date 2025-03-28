@@ -19,5 +19,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\css\" />
+    <Folder Include="wwwroot\images\AlbumCovers\" />
   </ItemGroup>
 </Project>

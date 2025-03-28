@@ -2,7 +2,7 @@
 
 namespace Core.DTOs;
 
-public class CustomerDTO
+public class UserDTO
 {
     public int Id { get; set; }
     [Required]

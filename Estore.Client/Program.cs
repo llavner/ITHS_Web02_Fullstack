@@ -11,7 +11,7 @@ builder.Services.AddMudServices();
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
-builder.Services.AddScoped<ProductService>().AddScoped<CustomerService>().AddScoped<CategoryService>();
+builder.Services.AddScoped<ProductService>().AddScoped<UserService>().AddScoped<CategoryService>();
 builder.Services.AddHttpClient();
 
 var app = builder.Build();

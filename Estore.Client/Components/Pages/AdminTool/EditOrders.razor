@@ -13,7 +13,7 @@
                      EditMode="DataGridEditMode.Form" StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges">
             <Columns>
                 <PropertyColumn Property="x => x.Id" Title="Order Id" />
-                <PropertyColumn Property="x => x.CustomerId" Title="Customer" />
+                <PropertyColumn Property="x => x.UserId" Title="User" />
                 <PropertyColumn Property="x => x.OrderItemId" Title="Order"/>
                 <PropertyColumn Property="x => x.OrderDate" Title="Date"/>
                 <PropertyColumn Property="x => x.Status" Title="Status" />
@@ -21,7 +21,7 @@
                     <CellTemplate>
                         <MudStack Row>
                             <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" />
-                            <MudIconButton @onclick="@(()=>DeleteCustomer(context.Item.Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" />
+                            <MudIconButton @onclick="@(()=>DeleteUser(context.Item.Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" />
                         </MudStack>
                     </CellTemplate>
                 </TemplateColumn>
@@ -31,10 +31,10 @@
 </div>
 
 @code {
-    public IEnumerable<CustomerDTO> customers;
+    public IEnumerable<UserDTO> user;
     public IEnumerable<OrderDTO> orders = Enumerable.Empty<OrderDTO>();
 
-    private CustomerDTO customerDto = new(); /* { Order = new Order() { Id = 0, Name = string.Empty, OrderDetailsId = 0 } }; */
+    private UserDTO customerDto = new(); /* { Order = new Order() { Id = 0, Name = string.Empty, OrderDetailsId = 0 } }; */
     private OrderDTO selectedOrder;
 
     private List<string> _events = new();
@@ -59,7 +59,7 @@
 
     }
 
-    public async Task DeleteCustomer(int id)
+    public async Task DeleteUser(int id)
     {
 
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Entites;
 
-public class Customer
+public class User
 {
     public int Id { get; set; }
     public required string FirstName { get; set; }
@@ -14,7 +14,6 @@ public class Customer
     public required string Email { get; set; }
     public required string Address { get; set; }
     public required string PhoneNumber { get; set; }
-    public required string PasswordHash { get; set; }
     public bool IsAdmin { get; set; }
 }
 

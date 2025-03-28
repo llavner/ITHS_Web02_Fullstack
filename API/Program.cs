@@ -34,7 +34,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 
 // Register Repository Service
 builder.Services.AddScoped<IProductRepository, ProductRepository>()
-                .AddScoped<ICustomerRepository, CustomerRepository>()
+                .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<ICatogoryRepository, CategoryRepository>()
                 .AddScoped<IOrderRepository, OrderRepository>();
 

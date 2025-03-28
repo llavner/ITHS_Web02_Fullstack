@@ -10,7 +10,7 @@
         <div class="col-4">
             <MudButton  Color="Color.Inherit" OnClick=@(() => SelectOption("Products"))>Products</MudButton>
             <MudButton Color="Color.Inherit" OnClick=@(() => SelectOption("Categories"))>Categories</MudButton>
-            <MudButton Color="Color.Inherit" OnClick=@(() => SelectOption("Customers"))>Customers</MudButton>
+            <MudButton Color="Color.Inherit" OnClick=@(() => SelectOption("Users"))>Users</MudButton>
             <MudButton Color="Color.Inherit" OnClick=@(() => SelectOption("Orders"))>Orders</MudButton>
         </div>
     </MudAppBar>
@@ -24,9 +24,9 @@
     {
         <EditCategories />
     }
-    else if (selectedOption == "Customers")
+    else if (selectedOption == "Users")
     {
-        <EditCustomers />
+        <EditUsers />
     }
     else if (selectedOption == "Orders")
     {

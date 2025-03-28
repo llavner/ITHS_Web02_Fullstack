@@ -23,9 +23,9 @@
                     <h6 class="text-uppercase fw-bold mb-4">
                         Products
                     </h6>
-                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => Index.SelectContent("Products"))>CD</MudButton><br />
-                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => Index.SelectContent("Products"))>Vinyl</MudButton><br />
-                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => Index.SelectContent("Products"))>Hi-Fi</MudButton><br />
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>CD</MudButton><br />
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Vinyl</MudButton><br />
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Hi-Fi</MudButton><br />
                 </div>
                 <!-- Grid column -->
                 <!-- Grid column -->
@@ -34,9 +34,9 @@
                     <h6 class="text-uppercase fw-bold mb-4">
                         Useful links
                     </h6>
-                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => Index.SelectContent("Products"))>Pricing</MudButton><br />
-                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => Index.SelectContent("Products"))>Settings</MudButton><br />
-                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => Index.SelectContent("Products"))>Orders</MudButton><br />
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Pricing</MudButton><br />
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Settings</MudButton><br />
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Orders</MudButton><br />
                 </div>
                 <!-- Grid column -->
                 <!-- Grid column -->
@@ -65,3 +65,15 @@
     <!-- Copyright -->
 </footer>
 <!-- Footer -->
+
+@code{
+
+    public string selectedContent = "Products";
+
+    public void SelectContent(string option)
+    {
+        selectedContent = option;
+
+    }
+
+}

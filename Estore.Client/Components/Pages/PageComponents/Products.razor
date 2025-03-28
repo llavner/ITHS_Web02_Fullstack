@@ -1,21 +1,48 @@
 ﻿@page "/products"
 @rendermode InteractiveServer
+@using Core.Services
+@using Core.DTOs
+@using Estore.Client.Components.Pages
+@inject ProductService productService
 
 
-@* <MudGrid Style="margin:10px; gap:10px; align-items:center">
-    <MudCard Style="width:15rem">
-        <MudCardMedia Image="images/test.webp" Height="200" />
-        <MudCardContent>
-            <MudText Typo="Typo.h5">Record 1</MudText>
-            <MudText Typo="Typo.body2">Groovey music from the 70s.</MudText>
-            <MudText Typo="Typo.body2">For drug using hippies only.</MudText>
-        </MudCardContent>
-        <MudCardActions>
-            <MudButton Variant="Variant.Text" Color="Color.Primary">Buy</MudButton>
-        </MudCardActions>
-    </MudCard>
-</MudGrid> *@
+<div class="container">
+
+    <div class="row">
+        @if (products != null)
+        {
+
+            @foreach (var item in products)
+            {
+                <div class="col-md-3 mt-5 justify-content-center">
+                <MudGrid Style="">
+                    <MudCard Style="width:12rem">
+                        <MudCardMedia Image="images/test.webp" Height="200" />
+                        <MudCardContent>
+                            <MudText Typo="Typo.h5">@item.Artist</MudText>
+                            <MudText Typo="Typo.body2">@item.AlbumTitle</MudText>
+                            <MudText Typo="Typo.body2">@item.Price</MudText>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary">Buy</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudGrid>
+                </div>
+            }
+        }
+    </div>
+
+ 
+</div>
 
 @code {
+    public IEnumerable<ProductDTO>? products { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await productService.GetAllAsync();
+
+    }
 
 }

@@ -1,0 +1,109 @@
+﻿@page "/edituser"
+@rendermode InteractiveServer
+@using Core.DTOs
+@using Core.Entites
+@using Core.Services
+@using System.ComponentModel.DataAnnotations
+@using System.Text.RegularExpressions
+@using MudBlazor.Charts
+@inject UserService userService
+
+<div class="d-flex flex-row gap-10">
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-4">
+            <MudForm Model="@userDto" @ref="form" @bind-IsValid="@formSuccess">
+
+                <MudTextField @bind-Value="userDto.FirstName" T="string" Label="First name" For="@(()=> userDto.FirstName)"/>
+                <MudTextField @bind-Value="userDto.LastName" T="string" Label="Last name" For="@(()=> userDto.LastName)" />
+                <MudTextField @bind-Value="userDto.Email" T="string" Label="Email" For="@(()=> userDto.Email)" />
+                <MudTextField @bind-Value="userDto.Address" T="string" Label="Address" For="@(()=> userDto.Address)" />
+                <MudTextField @bind-Value="userDto.PhoneNumber" T="string" Label="Phone number" For="@(()=> userDto.PhoneNumber)" />
+
+                <MudSwitch @bind-Value="userDto.IsAdmin" Label="Admin" Color="Color.Success" UncheckedColor="Color.Error" />
+                <MudButton Style="margin: 10px" Size="Size.Small" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!formSuccess)" Class="ml-auto" OnClick="@CreateUser">Add</MudButton>
+
+            </MudForm>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12" sm="6">
+        <MudDataGrid T="UserDTO" Items="@users" Filterable="false" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column" ReadOnly="false"
+        EditMode="DataGridEditMode.Form" StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges">
+            <Columns>
+                <PropertyColumn Property="x => x.FirstName" Title="First name" />
+                <PropertyColumn Property="x => x.LastName" Title="Last name"/>
+                <PropertyColumn Property="x => x.Email" />
+                <PropertyColumn Property="x => x.Address" />
+                <PropertyColumn Property="x => x.PhoneNumber" Title="Phone number" />
+                <PropertyColumn Property="x => x.IsAdmin" Title="Admin" />
+                <TemplateColumn CellClass="justify-content">
+                    <CellTemplate>
+                        <MudStack Row>
+                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" />
+                            <MudIconButton @onclick="@(()=>DeleteUser(context.Item.Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" />
+                        </MudStack>
+                    </CellTemplate>
+                </TemplateColumn>
+            </Columns>
+        </MudDataGrid>
+    </MudItem>
+</div>
+@code {
+    public IEnumerable<UserDTO> users;
+    public IEnumerable<OrderDTO> orders = Enumerable.Empty<OrderDTO>();
+
+    private UserDTO userDto = new(); /* { Order = new Order() { Id = 0, Name = string.Empty, OrderDetailsId = 0 } }; */
+    private OrderDTO selectedOrder;
+
+    private List<string> _events = new();
+
+    bool formSuccess;
+    MudForm form;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ListUsers();
+
+    }
+
+    // User events
+    void StartedEditingItem(UserDTO item)
+    {
+        _events.Insert(0, $"Event = StartedEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+    void CanceledEditingItem(UserDTO item)
+    {
+        _events.Insert(0, $"Event = CanceledEditingItem, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+    }
+
+    async Task CommittedItemChanges(UserDTO item)
+    {
+        _events.Insert(0, $"Event = CommittedItemChanges, Data = {System.Text.Json.JsonSerializer.Serialize(item)}");
+        await EditUser(item.Id, item);
+    }
+
+    public async Task ListUsers()
+    {
+        users = await userService.GetAllAsync();
+    }
+
+    private async Task CreateUser()
+    {
+        
+        await userService.PostAsync(userDto);
+        await ListUsers();
+
+    }
+
+    public async Task EditUser(int userId, UserDTO updatedUser)
+    {
+        await userService.UpdateProductAsync(userId, updatedUser);
+        await ListUsers();
+    }
+    public async Task DeleteUser(int userId)
+    {
+        await userService.DeleteAsync(userId);
+        await ListUsers();
+    }
+}

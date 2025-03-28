@@ -12,8 +12,8 @@ public class OrderDTO
 {
     public int Id { get; set; }
     [Required(ErrorMessage = "CustomerId is required.")]
-    public int CustomerId { get; set; }
-    public Customer Customer { get; set; }
+    public int UserId { get; set; }
+    public User User { get; set; }
     [Required(ErrorMessage = "OrderId is required.")]
     public int OrderItemId { get; set; }
     public OrderItem OrderItem { get; set; }

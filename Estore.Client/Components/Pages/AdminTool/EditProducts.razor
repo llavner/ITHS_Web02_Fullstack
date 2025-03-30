@@ -16,12 +16,13 @@
 
                 <MudTextField @bind-Value="productDto.Artist" T="string" Label="Artist" For="@(()=> productDto.Artist)"/>
                 <MudTextField @bind-Value="productDto.AlbumTitle" T="string" Label="Album" For="@(()=> productDto.AlbumTitle)" />
-                <MudTextField @bind-Value="productDto.Price" T="decimal" Label="Price" For="@(()=> productDto.Price)" />
+                <MudTextField @bind-Value="productDto.PictureUrl" T="string" Label="Picture" For="@(()=> productDto.PictureUrl)" />
+                <MudTextField @bind-Value="productDto.Price" T="long" Label="Price" For="@(()=> productDto.Price)" />
                 <MudTextField @bind-Value="productDto.StockQuantity" T="int" Label="Stock" For="@(()=> productDto.StockQuantity)" />
-                <MudSelect T="CategoryDTO" Label="Select Category" @bind-Value="selectedCategory">
+                <MudSelect T="int" Label="Select Category" @bind-Value="productDto.CategoryId">
                     @foreach (var category in categories)
                     {
-                        <MudSelectItem T="CategoryDTO" Value="category">@category.Name</MudSelectItem>
+                        <MudSelectItem T="int" Value="category.Id">@category.Name</MudSelectItem>
                     }
                 </MudSelect>
                 <MudSwitch @bind-Value="productDto.IsProductAvailable" Label="Available" Color="Color.Success" UncheckedColor="Color.Error" />
@@ -100,7 +101,7 @@
     }
     private async Task CreateProduct()
     {
-        productDto.Category.Id = selectedCategory.Id;
+        
         await productService.PostAsync(productDto);
         await ListProducts();
 

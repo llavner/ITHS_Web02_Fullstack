@@ -63,8 +63,8 @@
     public IEnumerable<CategoryDTO> categories = Enumerable.Empty<CategoryDTO>();
 
     private ProductDTO productDto = new() { Category = new Category() { Id = 0, Name = string.Empty } };
+
     private List<string> _events = new();
-    private CategoryDTO selectedCategory;
     bool formSuccess;
     MudForm form;
 

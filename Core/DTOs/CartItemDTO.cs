@@ -9,11 +9,12 @@ namespace Core.DTOs;
 
 public class CartItemDTO
 {
-    public int Id { get; set; }
     public int ProductId { get; set; }
-    public Product Product { get; set; }
-    public int Quantity { get; set; }
+    public required string PictureUrl { get; set; }
+    public required string Artist { get; set; }
+    public required string AlbumTitle { get; set; }
     public long Price { get; set; }
+    public int Quantity { get; set; }
 
 }
 

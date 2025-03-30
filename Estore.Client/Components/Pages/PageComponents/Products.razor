@@ -2,11 +2,12 @@
 @rendermode InteractiveServer
 @using Core.Services
 @using Core.DTOs
+@using Core.Extensions
 @using Estore.Client.Components.Pages
 @inject ProductService productService
 
 
-<div class="container">
+<div class="container mb-5">
 
     <div class="row">
         @if (products != null)
@@ -15,29 +16,31 @@
             @foreach (var item in products)
             {
                 <div class="col-md-3 mt-5 justify-content-center">
-                <MudGrid Style="">
-                    <MudCard Style="width:12rem">
-                        <MudCardMedia Image="images/test.webp" Height="200" />
-                        <MudCardContent>
-                            <MudText Typo="Typo.h5">@item.Artist</MudText>
-                            <MudText Typo="Typo.body2">@item.AlbumTitle</MudText>
-                            <MudText Typo="Typo.body2">@item.Price</MudText>
-                        </MudCardContent>
-                        <MudCardActions>
-                            <MudButton Variant="Variant.Text" Color="Color.Primary">Buy</MudButton>
-                        </MudCardActions>
-                    </MudCard>
-                </MudGrid>
+                    <MudGrid Style="">
+                        <MudCard Style="width:12rem">
+                            <MudCardMedia Image="@($"{picFolder}{item.PictureUrl}")" Height="200" />
+                            <MudCardContent>
+                                <MudText Typo="Typo.h5">@item.Artist</MudText>
+                                <MudText Typo="Typo.body2">@item.AlbumTitle</MudText>
+                                <MudText Typo="Typo.body2">@item.Price :-</MudText>
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="@(()=>AddItemToCart(item))">Buy</MudButton>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudGrid>
                 </div>
             }
         }
     </div>
 
- 
+
 </div>
 
 @code {
     public IEnumerable<ProductDTO>? products { get; set; }
+
+    public string picFolder = "/images/AlbumCovers/";
 
     protected override async Task OnInitializedAsync()
     {
@@ -45,4 +48,18 @@
 
     }
 
+    public void AddItemToCart(ProductDTO productDTO)
+    {
+        var cartItem = productDTO.ToCartItemDTO();
+
+        ShoppingCart.MyCart.CartItems.Add(cartItem);
+    }
+
+    public async Task GetProductAsync(int productId)
+    {
+
+    }
 }
+       
+            
+

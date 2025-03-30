@@ -10,6 +10,6 @@ namespace Core.DTOs;
 public class CartDTO
 {
     public int Id { get; set; }
-    public ICollection<CartItemDTO> CartItems { get; set; }
+    public ICollection<CartItemDTO> CartItems { get; set; } = [];
 }
 

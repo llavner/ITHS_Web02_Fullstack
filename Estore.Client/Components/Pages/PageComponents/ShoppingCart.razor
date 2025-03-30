@@ -1,0 +1,31 @@
+﻿@page "/shoppingcart"
+@using Core.Services
+@using Core.DTOs
+@rendermode InteractiveServer
+@inject ProductService productService
+
+<div class="container">
+    <h1 class="text-center">Shopping Cart</h1>
+
+    <div class="d-flex justify-content-center">
+        <ul>
+            @foreach (var item in listedCartItems)
+            {
+                <li>@item.Artist - @item.AlbumTitle</li>
+            }
+
+        </ul>
+    </div>
+</div>
+@code {
+    public static CartDTO MyCart = new();
+    public List<CartItemDTO> listedCartItems { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        listedCartItems = MyCart.CartItems.ToList();
+
+    }
+
+
+}

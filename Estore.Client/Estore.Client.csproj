@@ -22,9 +22,4 @@
   <ItemGroup>
     <ProjectReference Include="..\API\API.csproj" />
   </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="wwwroot\images\AlbumCovers\" />
-  </ItemGroup>
 </Project>

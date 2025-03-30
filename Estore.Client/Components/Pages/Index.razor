@@ -15,7 +15,7 @@
             </div>
             <div class="col-1">
                 <MudIconButton Icon="@Icons.Material.Filled.Person" Edge="Edge.End" Color="Color.Inherit" Size="Size.Medium" OnClick=@(() => SelectContent("Login")) />
-                <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" Edge="Edge.End" Color="Color.Inherit" OnClick="@ToggleOpen" Size="Size.Medium" />
+                <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" Edge="Edge.End" Color="Color.Inherit" Size="Size.Medium" OnClick=@(() => SelectContent("Cart")) />
             </div>
         </MudAppBar>
     </div>
@@ -28,6 +28,10 @@
         else if (selectedContent == "Login")
         {
             <Login />
+        }
+        else if (selectedContent == "Cart")
+        {
+            <ShoppingCart/>
         }
     </div>
 
@@ -112,35 +116,10 @@
     public void SelectContent(string option)
     {
         selectedContent = option;
-
-    }
-    // Cart
-    public CartDTO MyCart { get; set; } = new();
-    private bool _open;
-    private void ToggleOpen() => _open = !_open;
-
-    public void ListCartItems()
-    {
-        MyCart.CartItems.ToList();
-    }
-    private void AddItemsToCart(int productId)
-    {
-       
-    }
-
-    private void CheckOut()
-    {
-
     }
 
     protected override async Task OnInitializedAsync()
     {
-        
-
     }
 
-    void UpdateFilteredProducts(string searchTerm)
-    {
-
-    }
 }

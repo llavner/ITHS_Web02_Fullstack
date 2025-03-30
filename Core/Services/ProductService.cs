@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text;
+using Core.Extensions;
 
 namespace Core.Services;
 
@@ -15,22 +16,14 @@ public class ProductService(HttpClient http)
     {
         var products = await _http.GetFromJsonAsync<List<Product>>("https://localhost:7120/api/Product");
 
+        return products.Select(p => p.ToProductDTO());
 
-        return products.Select(p => new ProductDTO
-        {
-            Id = p.Id,
-            Artist = p.Artist,
-            AlbumTitle = p.AlbumTitle,
-            Price = p.Price,
-            StockQuantity = p.StockQuantity,
-            IsProductAvailable = p.IsProductAvailable,
-            CategoryId = p.CategoryId,
-            Category = p.Category
-        });
     }
 
-    public async Task<ProductDTO> PostAsync(ProductDTO product)
+    public async Task<ProductDTO> PostAsync(ProductDTO productDto)
     {
+        var product = productDto.ToProduct();
+
         var response = await _http.PostAsJsonAsync("https://localhost:7120/api/Product", product);
 
         response.EnsureSuccessStatusCode();

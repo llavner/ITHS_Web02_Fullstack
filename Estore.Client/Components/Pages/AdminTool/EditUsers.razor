@@ -52,7 +52,7 @@
     public IEnumerable<UserDTO> users;
     public IEnumerable<OrderDTO> orders = Enumerable.Empty<OrderDTO>();
 
-    private UserDTO userDto = new(); /* { Order = new Order() { Id = 0, Name = string.Empty, OrderDetailsId = 0 } }; */
+    private UserDTO userDto = new();
     private OrderDTO selectedOrder;
 
     private List<string> _events = new();

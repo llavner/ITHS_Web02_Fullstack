@@ -34,29 +34,12 @@ public class ProductController(IProductRepository productRepository) : Controlle
 
     // POST api/<ProductController>
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] ProductDTO productDto)
+    public async Task<IActionResult> Post([FromBody] Product product)
     {
-        //if (string.IsNullOrWhiteSpace(productDto.Name))
-        //{
-        //    return BadRequest(new { message = "Value can not be empty" });
-        //}
-
-        var product = new Product
-        {
-            Artist = productDto.Artist,
-            AlbumTitle = productDto.AlbumTitle,
-            Price = productDto.Price,
-            StockQuantity = productDto.StockQuantity,
-            IsProductAvailable = productDto.IsProductAvailable,
-            CategoryId = productDto.CategoryId
-        };
-
+        
         await _productRepository.AddAsync(product);
 
         return Ok(new { message = $"Added Product {product.Artist} {product.AlbumTitle}", product });
-
-
-
     }
 
     // PUT api/<ProductController>/5

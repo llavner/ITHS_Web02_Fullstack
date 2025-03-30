@@ -19,6 +19,7 @@ public class ProductService(HttpClient http)
         return products.Select(p => new ProductDTO
         {
             Id = p.Id,
+            PictureUrl = p.PictureUrl,
             Artist = p.Artist,
             AlbumTitle = p.AlbumTitle,
             Price = p.Price,
@@ -29,8 +30,19 @@ public class ProductService(HttpClient http)
         });
     }
 
-    public async Task<ProductDTO> PostAsync(ProductDTO product)
+    public async Task<ProductDTO> PostAsync(ProductDTO productDto)
     {
+        var product = new Product
+        {
+            PictureUrl = productDto.PictureUrl,
+            Artist = productDto.Artist,
+            AlbumTitle = productDto.AlbumTitle,
+            Price = productDto.Price,
+            StockQuantity = productDto.StockQuantity,
+            IsProductAvailable = productDto.IsProductAvailable,
+            CategoryId = productDto.CategoryId
+        };
+
         var response = await _http.PostAsJsonAsync("https://localhost:7120/api/Product", product);
 
         response.EnsureSuccessStatusCode();

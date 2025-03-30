@@ -9,9 +9,10 @@ namespace Core.Entites;
 public class Product
 {
     public int Id { get; set; }
+    public string PictureUrl { get; set; }
     public string Artist { get; set; }
     public string AlbumTitle { get; set; }
-    public decimal Price { get; set; }
+    public long Price { get; set; }
     public int StockQuantity { get; set; }
     public bool IsProductAvailable { get; set; }
     public int CategoryId { get; set; }

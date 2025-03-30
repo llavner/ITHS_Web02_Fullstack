@@ -6,6 +6,8 @@ namespace Core.DTOs;
 public class ProductDTO
 {
     public int Id { get; set; }
+    public string PictureUrl { get; set; }
+
     [Required]
     [StringLength(50, ErrorMessage = "Name cannot be longer than 50 characters")]
     public string Artist { get; set; }
@@ -14,7 +16,7 @@ public class ProductDTO
     public string AlbumTitle { get; set; }
     [Required]
     [Range(1, 50000, ErrorMessage = "Please enter a number between 1 and 50000")]
-    public decimal Price { get; set; }
+    public long Price { get; set; }
     [Required]
     [Range(1, 500, ErrorMessage = "Please enter a number between 1 and 500")]
     public int StockQuantity { get; set; }

@@ -1,4 +1,4 @@
-﻿@typeparam T
+﻿@* @typeparam T
 
 <input class="form-control" style="min-width: 20rem;max-width:20rem; margin:10px; border-radius: 20px; padding: 5px;" @bind="searchItem" placeholder="What are you looking for?" />
 <button class="form-control" style="max-width:10rem; padding: 5px; border-radius: 5px" @onclick=OnSearchClicked>Search</button>
@@ -18,3 +18,4 @@
         await OnSearch.InvokeAsync(searchItem);
     }
 }
+ *@

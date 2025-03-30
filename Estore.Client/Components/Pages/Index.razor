@@ -8,12 +8,18 @@
 <div class="d-flex flex-column min-vh-100">
 
     <!-- App Bar -->
-    <div class="d-flex flex-row">
+    <div class="d-flex flex-row justify-space-between">
         <MudAppBar Color="Color.Primary" Fixed="true">
-            <div class="col-11">
+            <div class="col-6">
                 <MudText Typo="Typo.h6" Class="ml-2">Record Store</MudText>
             </div>
-            <div class="col-1">
+
+            <div class="col-5 text-center">
+                <input class="border-1 rounded m-6 p-6 h-6" @bind-value="SearchText"
+                       @bind-value:event="oninput" placeholder="Search by Artist" />
+            </div>
+
+            <div class="col-0">
                 <MudIconButton Icon="@Icons.Material.Filled.Person" Edge="Edge.End" Color="Color.Inherit" Size="Size.Medium" OnClick=@(() => SelectContent("Login")) />
                 <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" Edge="Edge.End" Color="Color.Inherit" Size="Size.Medium" OnClick=@(() => SelectContent("Cart")) />
             </div>
@@ -112,7 +118,7 @@
 
 @code {
     public string selectedContent = "Products";
-
+    public string SearchText { get; set; }
     public void SelectContent(string option)
     {
         selectedContent = option;

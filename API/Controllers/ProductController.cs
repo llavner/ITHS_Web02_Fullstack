@@ -35,9 +35,9 @@ public class ProductController(IProductRepository productRepository) : Controlle
 
     // POST api/<ProductController>
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] Product product)
+    public async Task<IActionResult> Post([FromBody] ProductDTO productDto)
     {
-        
+        var product = productDto.ToProduct();
         await _productRepository.AddAsync(product);
 
         return Ok(new { message = $"Added Product {product.Artist} {product.AlbumTitle}", product });

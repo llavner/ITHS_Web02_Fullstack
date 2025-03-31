@@ -22,9 +22,9 @@ public class ProductService(HttpClient http)
 
     public async Task<ProductDTO> PostAsync(ProductDTO productDto)
     {
-        var product = productDto.ToProduct();
+        //var product = productDto.ToProduct();
 
-        var response = await _http.PostAsJsonAsync("https://localhost:7120/api/Product", product);
+        var response = await _http.PostAsJsonAsync("https://localhost:7120/api/Product", productDto);
 
         response.EnsureSuccessStatusCode();
 

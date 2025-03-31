@@ -22,7 +22,7 @@ public class ProductDTO
     public int StockQuantity { get; set; }
     public bool IsProductAvailable { get; set; }
     public int CategoryId { get; set; }
-    public Category Category { get; set; }
+    public Category Category { get; set; } // changed to DTO
 }
 
 

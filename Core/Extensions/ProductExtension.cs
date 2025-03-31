@@ -34,7 +34,8 @@ public static class ProductExtension
             Price = product.Price,
             StockQuantity = product.StockQuantity,
             IsProductAvailable = product.IsProductAvailable,
-            CategoryId = product.CategoryId
+            CategoryId = product.CategoryId,
+            
         };
     }
 
@@ -49,7 +50,8 @@ public static class ProductExtension
             Price = productDto.Price,
             StockQuantity = productDto.StockQuantity,
             IsProductAvailable = productDto.IsProductAvailable,
-            CategoryId = productDto.CategoryId
+            CategoryId = productDto.CategoryId,
+            Category = productDto.Category
         };
     }
 }

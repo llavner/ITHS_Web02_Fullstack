@@ -51,8 +51,7 @@ public static class ProductExtension
             Price = productDto.Price,
             StockQuantity = productDto.StockQuantity,
             IsProductAvailable = productDto.IsProductAvailable,
-            CategoryId = productDto.CategoryId,
-            Category = productDto.Category
+            CategoryId = productDto.CategoryId
         };
     }
 }

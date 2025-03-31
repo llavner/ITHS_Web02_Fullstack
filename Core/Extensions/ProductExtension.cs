@@ -35,7 +35,8 @@ public static class ProductExtension
             StockQuantity = product.StockQuantity,
             IsProductAvailable = product.IsProductAvailable,
             CategoryId = product.CategoryId,
-            
+            Category = product.Category
+
         };
     }
 

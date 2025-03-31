@@ -30,7 +30,7 @@ public class ProductController(IProductRepository productRepository) : Controlle
         if (product == null)
             return NotFound();
         else
-            return Ok(product);
+            return Ok(product.ToProductDTO());
     }
 
     // POST api/<ProductController>

@@ -1,5 +1,6 @@
 using Core.DTOs;
 using Core.Entites;
+using Core.Extensions;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +30,7 @@ public class ProductController(IProductRepository productRepository) : Controlle
         if (product == null)
             return NotFound();
         else
-            return Ok(product);
+            return Ok(product.ToProductDTO());
     }
 
     // POST api/<ProductController>

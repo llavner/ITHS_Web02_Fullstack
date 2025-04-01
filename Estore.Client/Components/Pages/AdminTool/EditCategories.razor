@@ -8,11 +8,11 @@
 @using MudBlazor.Charts
 @inject CategoryService categoryService
 
-<div class="d-flex flex-row gap-10">
-    <MudItem xs="12" sm="4">
-        <MudPaper Class="pa-4">
+<div class="d-flex flex-row mb-5 justify-content-center">
+    <MudItem xs="12" sm="3">
+        <MudPaper Class="pa-4 mr-4">
             <MudForm Model="@categoryDto" @ref="form" @bind-IsValid="@formSuccess">
-                <MudTextField @bind-Value="categoryDto.Name" T="string" Label="Category Name" />
+                <MudTextField @bind-Value="categoryDto.Name" T="string" Required="true" Label="Category Name" />
                 <div class="d-flex align-center justify-space-between align-items-center">
                     <MudButton Style="margin: 10px" Size="Size.Small" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!formSuccess)" Class="ml-auto" OnClick="@CreateCategory">Add</MudButton>
                 </div>
@@ -20,17 +20,25 @@
         </MudPaper>
     </MudItem>
 
-    <MudItem xs="12" sm="6">
-        <MudDataGrid T="CategoryDTO" Items="@categories" Filterable="false" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column" ReadOnly="false"
-                     EditMode="DataGridEditMode.Form" StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges">
+    <MudItem xs="12" sm="5">
+        <MudDataGrid T="CategoryDTO" Items="@categories" Filterable="false" QuickFilter="@_quickFilter" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column" ReadOnly="false"
+        EditMode="DataGridEditMode.Form" StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Categories:</MudText>
+                <MudSpacer />
+                <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
             <Columns>
                 <PropertyColumn Property="x => x.Name" Title="Category Name" />
                 <TemplateColumn CellClass="justify-content">
                     <CellTemplate>
-                        <MudStack Row>
-                            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" />
-                            <MudIconButton @onclick="@(()=>DeleteCategory(context.Item.Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" />
-                        </MudStack>
+                        <div class="col">
+                            <MudStack Row>
+                                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@context.Actions.StartEditingItemAsync" />
+                                <MudIconButton @onclick="@(()=>DeleteCategory(context.Item.Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" />
+                            </MudStack>
+                        </div>
                     </CellTemplate>
                 </TemplateColumn>
             </Columns>
@@ -38,15 +46,10 @@
     </MudItem>
 </div>
 @code {
-    //public IEnumerable<ProductDTO> products;
     public IEnumerable<CategoryDTO> categories = Enumerable.Empty<CategoryDTO>();
-
-    //private ProductDTO productDto = new() { Category = new Category() { Id = 0, Name = string.Empty } };
     private CategoryDTO categoryDto = new();
-    //private CategoryDTO selectedCategory;
-
     private List<string> _events = new();
-
+    private string _searchString;
     bool formSuccess;
     MudForm form;
 
@@ -54,6 +57,17 @@
     {
         await ListCategories();
     }
+
+    private Func<CategoryDTO, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(_searchString))
+            return true;
+
+        if (x.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    };
 
     // Category events
     void StartedEditingItem(CategoryDTO item)
@@ -79,6 +93,7 @@
     private async Task CreateCategory()
     {
         await categoryService.AddCategoryAsync(categoryDto);
+        categoryDto = new();
         await ListCategories();
     }
 

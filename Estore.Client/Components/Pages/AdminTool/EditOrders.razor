@@ -7,10 +7,16 @@
 @using System.Text.RegularExpressions
 @using MudBlazor.Charts
 
-<div class="d-flex flex-row gap-10">
+<div class="d-flex flex-row justify-content-center">
     <MudItem xs="12" sm="6">
-        <MudDataGrid T="OrderDTO" Items="@orders" Filterable="false" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column" ReadOnly="false"
-                     EditMode="DataGridEditMode.Form" StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges">
+        <MudDataGrid T="OrderDTO" Items="@orders" Filterable="false" QuickFilter="@_quickFilter" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column" ReadOnly="false"
+        EditMode="DataGridEditMode.Form" StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Orders:</MudText>
+                <MudSpacer />
+                <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
             <Columns>
                 <PropertyColumn Property="x => x.Id" Title="Order Id" />
                 <PropertyColumn Property="x => x.UserId" Title="User" />
@@ -35,12 +41,29 @@
     public IEnumerable<OrderDTO> orders = Enumerable.Empty<OrderDTO>();
 
     private UserDTO customerDto = new(); /* { Order = new Order() { Id = 0, Name = string.Empty, OrderDetailsId = 0 } }; */
-    private OrderDTO selectedOrder;
-
+    //private OrderDTO selectedOrder;
+    private string _searchString;
     private List<string> _events = new();
 
     bool formSuccess;
     MudForm form;
+
+    private Func<OrderDTO, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(_searchString))
+            return true;
+
+        if (x.User.FirstName.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (x.User.LastName.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (x.Status.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (x.User.Email.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    };
 
     // Order events
     void StartedEditingItem(OrderDTO item)

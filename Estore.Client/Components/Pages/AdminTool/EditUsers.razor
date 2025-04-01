@@ -8,14 +8,15 @@
 @using MudBlazor.Charts
 @inject UserService userService
 
-<div class="d-flex flex-row gap-10">
-    <MudItem xs="12" sm="4">
-        <MudPaper Class="pa-4">
+<div class="d-flex flex-row mb-5">
+    
+    <MudItem xs="12" sm="3">
+        <MudPaper Class="pa-4 mr-4">
             <MudForm Model="@userDto" @ref="form" @bind-IsValid="@formSuccess">
 
                 <MudTextField @bind-Value="userDto.FirstName" T="string" Label="First name" For="@(()=> userDto.FirstName)"/>
                 <MudTextField @bind-Value="userDto.LastName" T="string" Label="Last name" For="@(()=> userDto.LastName)" />
-                <MudTextField @bind-Value="userDto.Email" T="string" Label="Email" For="@(()=> userDto.Email)" />
+                <MudTextField @bind-Value="userDto.Email" T="string" Required="true" Label="Email" For="@(()=> userDto.Email)" />
                 <MudTextField @bind-Value="userDto.Address" T="string" Label="Address" For="@(()=> userDto.Address)" />
                 <MudTextField @bind-Value="userDto.PhoneNumber" T="string" Label="Phone number" For="@(()=> userDto.PhoneNumber)" />
 
@@ -25,10 +26,16 @@
             </MudForm>
         </MudPaper>
     </MudItem>
-
-    <MudItem xs="12" sm="6">
-        <MudDataGrid T="UserDTO" Items="@users" Filterable="false" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column" ReadOnly="false"
+    
+    <MudItem xs="12" sm="9">
+        <MudDataGrid T="UserDTO" Items="@users" Filterable="false" QuickFilter="@_quickFilter" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column" ReadOnly="false"
         EditMode="DataGridEditMode.Form" StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Users:</MudText>
+                <MudSpacer />
+                <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
             <Columns>
                 <PropertyColumn Property="x => x.FirstName" Title="First name" />
                 <PropertyColumn Property="x => x.LastName" Title="Last name"/>
@@ -47,6 +54,7 @@
             </Columns>
         </MudDataGrid>
     </MudItem>
+    
 </div>
 @code {
     public IEnumerable<UserDTO> users;
@@ -54,6 +62,7 @@
 
     private UserDTO userDto = new();
     private OrderDTO selectedOrder;
+    private string _searchString;
 
     private List<string> _events = new();
 
@@ -65,6 +74,29 @@
         await ListUsers();
 
     }
+
+    private Func<UserDTO, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(_searchString))
+            return true;
+
+        if (x.FirstName.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.LastName.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.Address.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.Email.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.PhoneNumber.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    };
 
     // User events
     void StartedEditingItem(UserDTO item)

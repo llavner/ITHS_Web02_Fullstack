@@ -1,28 +1,27 @@
-﻿@page "/products"
+﻿@page "/cd"
 @rendermode InteractiveServer
 @using Core.Services
 @using Core.DTOs
 @using Core.Extensions
 @using Estore.Client.Components.Pages
 @inject ProductService productService
-
+@inject ISnackbar Snackbar
 
 <div class="container mb-5">
-
     <div class="row">
         @if (products != null)
         {
 
             @foreach (var item in products)
             {
-                <div class="col-md-3 mt-3 mb-5 justify-content-center">
-                    <MudGrid>
-                        <MudCard Style="width:12rem; height: 23rem">
+                <div class="col-md-3 mt-5 justify-content-center">
+                    <MudGrid Style="">
+                        <MudCard Style="width:12rem">
                             <MudCardMedia Image="@($"{picFolder}{item.PictureUrl}")" Height="200" />
                             <MudCardContent>
                                 <MudText Typo="Typo.h5">@item.Artist</MudText>
                                 <MudText Typo="Typo.body2">@item.AlbumTitle</MudText>
-                                <small class="d-flex justify-content-between text-muted">
+                                <small class="text-muted">
                                     @item.Category.Name
                                     <span class="fw-bold">@item.Price :-</span>
                                 </small>
@@ -44,15 +43,12 @@
 
 @code {
     public IEnumerable<ProductDTO>? products { get; set; }
-    public IEnumerable<ProductDTO>? cds { get; set; }
-    public IEnumerable<ProductDTO>? vinyls { get; set; }
-    public IEnumerable<ProductDTO>? casettes { get; set; }
 
     public string picFolder = "/images/AlbumCovers/";
 
     protected override async Task OnInitializedAsync()
     {
-        products = await productService.GetAllAsync();
+        products = await productService.GetCasetteAsync();
 
     }
 
@@ -63,20 +59,10 @@
         cartItem.Quantity = 1;
 
         ShoppingCart.MyCart.CartItems.Add(cartItem);
+
+        Snackbar.Add($"Item added to cart!", Severity.Success);
     }
 
-    // public async Task GetAllCDs()
-    // {
-    //     cds = await productService.GetCDAsync();
-    // }
-    // public async Task GetAllVinyls()
-    // {
-    //     vinyls = await productService.GetVinylAsync();
-    // }
-    // public async Task GetAllCasettes()
-    // {
-    //     casettes = await productService.GetCasetteAsync();
-    // }
 }
 
 

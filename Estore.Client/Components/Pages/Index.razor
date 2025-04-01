@@ -10,26 +10,42 @@
     <!-- App Bar -->
     <div class="d-flex flex-row justify-space-between">
         <MudAppBar Color="Color.Primary" Fixed="true">
-            <div class="col-6">
+            <div class="col-4">
                 <MudText Typo="Typo.h6" Class="ml-2">Record Store</MudText>
             </div>
-
+            <div class="col-2 text-center">
+                <MudButton Color="Color.Inherit" OnClick=@(() => SelectContent("CD"))>CD</MudButton>
+                <MudButton Color="Color.Inherit" OnClick=@(() => SelectContent("Vinyl"))>Vinyl</MudButton>
+                <MudButton Color="Color.Inherit" OnClick=@(() => SelectContent("Casette"))>Casette</MudButton>
+            </div>
             <div class="col-5 text-center">
                 <input class="border-1 rounded m-6 p-6 h-6" @bind-value="SearchText"
                        @bind-value:event="oninput" placeholder="Search by Artist" />
             </div>
 
-            <div class="col-0">
+            <div class="col-1">
                 <MudIconButton Icon="@Icons.Material.Filled.Person" Edge="Edge.End" Color="Color.Inherit" Size="Size.Medium" OnClick=@(() => SelectContent("Login")) />
                 <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" Edge="Edge.End" Color="Color.Inherit" Size="Size.Medium" OnClick=@(() => SelectContent("Cart")) />
             </div>
         </MudAppBar>
     </div>
     <!-- Content -->
-    <div class="content flex-grow-1">
-        @if (selectedContent == "Products")
+    <div class="content flex-grow-1 mb-5 mt-5">
+        @if (selectedContent == "Home")
         {
-            <Products />
+            <Home />
+        }
+        else if (selectedContent == "CD")
+        {
+            <CD />
+        }
+        else if (selectedContent == "Vinyl")
+        {
+            <Vinyl />
+        }
+        else if (selectedContent == "Casette")
+        {
+            <Casette />
         }
         else if (selectedContent == "Login")
         {
@@ -70,9 +86,9 @@
                     <h6 class="text-uppercase fw-bold mb-4">
                         Products
                     </h6>
-                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>CD</MudButton><br />
-                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Vinyl</MudButton><br />
-                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Casette</MudButton><br />
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("CD"))>CD</MudButton><br />
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Vinyl"))>Vinyl</MudButton><br />
+                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Casette"))>Casette</MudButton><br />
                 </div>
                 <!-- Grid column -->
                 <!-- Grid column -->
@@ -82,7 +98,6 @@
                         Useful links
                     </h6>
                     <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Pricing</MudButton><br />
-                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Settings</MudButton><br />
                     <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Orders</MudButton><br />
                 </div>
                 <!-- Grid column -->
@@ -117,7 +132,7 @@
 </div>
 
 @code {
-    public string selectedContent = "Products";
+    public string selectedContent = "Home";
     public string SearchText { get; set; }
     public void SelectContent(string option)
     {

@@ -9,20 +9,21 @@
 @inject ProductService productService
 @inject CategoryService categoryService
 
-<div class="d-flex flex-row gap-10">
-    <MudItem xs="12" sm="4">
-        <MudPaper Class="pa-4">
+<div class="d-flex flex-row mb-5">
+    <MudItem xs="12" sm="3">
+        <MudPaper Class="pa-4 mr-4">
             <MudForm Model="@productDto" @ref="form" @bind-IsValid="@formSuccess">
 
-                <MudTextField @bind-Value="productDto.Artist" T="string" Label="Artist" For="@(()=> productDto.Artist)"/>
+                <MudTextField @bind-Value="productDto.Artist" T="string" Required="true" Label="Artist" For="@(()=> productDto.Artist)"/>
                 <MudTextField @bind-Value="productDto.AlbumTitle" T="string" Label="Album" For="@(()=> productDto.AlbumTitle)" />
                 <MudTextField @bind-Value="productDto.PictureUrl" T="string" Label="Picture" For="@(()=> productDto.PictureUrl)" />
                 <MudTextField @bind-Value="productDto.Price" T="long" Label="Price" For="@(()=> productDto.Price)" />
                 <MudTextField @bind-Value="productDto.StockQuantity" T="int" Label="Stock" For="@(()=> productDto.StockQuantity)" />
-                <MudSelect T="int" Label="Select Category" @bind-Value="productDto.CategoryId">
+                <MudSelect T="int" Label="Select Category" @bind-Value="productDto.CategoryId" For="@(()=> productDto.CategoryId)">
                     @foreach (var category in categories)
                     {
                         <MudSelectItem T="int" Value="category.Id">@category.Name</MudSelectItem>
+
                     }
                 </MudSelect>
                 <MudSwitch @bind-Value="productDto.IsProductAvailable" Label="Available" Color="Color.Success" UncheckedColor="Color.Error" />
@@ -35,9 +36,15 @@
 
 
 
-    <MudItem xs="12" sm="6" Class="mw-100vh">
-        <MudDataGrid T="ProductDTO" Items="@products" Filterable="false" SortMode="@SortMode.None" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column" ReadOnly="false"
-                     EditMode="DataGridEditMode.Form" StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges">
+    <MudItem xs="12" sm="9">
+        <MudDataGrid T="ProductDTO" Items="@products" Filterable="false" QuickFilter="@_quickFilter" SortMode="@SortMode.Single" Groupable="false" Bordered="true" ColumnResizeMode="ResizeMode.Column" ReadOnly="false"
+        EditMode="DataGridEditMode.Form" StartedEditingItem="@StartedEditingItem" CanceledEditingItem="@CanceledEditingItem" CommittedItemChanges="@CommittedItemChanges">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Records:</MudText>
+                <MudSpacer />
+                <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
             <Columns>
                 <PropertyColumn Property="x => x.Artist" Title="Artist Name" />
                 <PropertyColumn Property="x => x.AlbumTitle" Title="Album Title" />
@@ -63,7 +70,7 @@
     public IEnumerable<CategoryDTO> categories = Enumerable.Empty<CategoryDTO>();
 
     private ProductDTO productDto = new() { Category = new Category() { Id = 0, Name = string.Empty } };
-
+    private string _searchString;
     private List<string> _events = new();
     bool formSuccess;
     MudForm form;
@@ -73,6 +80,23 @@
         await ListProducts();
         await ListCategories();
     }
+
+    private Func<ProductDTO, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(_searchString))
+            return true;
+
+        if (x.Artist.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.AlbumTitle.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.Category.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    };
 
     // Product events
     void StartedEditingItem(ProductDTO item)

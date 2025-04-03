@@ -1,146 +1,61 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 @using Core.DTOs
 @using Core.Services
 @using Estore.Client.Components.Pages.PageComponents
-@rendermode InteractiveServer
 @inject ProductService productService
+@inject ContentService contentService
 
+
+<!-- App Bar -->
+<div class="d-flex flex-row justify-space-between">
+    <MudAppBar Color="Color.Primary" Fixed="true">
+        <div class="col-11">
+            <MudText Typo="Typo.h6" Class="ml-2">Record Store</MudText>
+        </div>
+        <div class="col-1">
+            <MudIconButton Icon="@Icons.Material.Filled.Storefront" Edge="Edge.End" Color="Color.Inherit" Size="Size.Medium" OnClick=@(() => contentService.SelectContent("Products")) />
+            <MudIconButton Icon="@Icons.Material.Filled.Person" Edge="Edge.End" Color="Color.Inherit" Size="Size.Medium" OnClick=@(() => contentService.SelectContent("Login")) />
+            <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" Edge="Edge.End" Color="Color.Inherit" Size="Size.Medium" OnClick=@(() => contentService.SelectContent("Cart")) />
+        </div>
+    </MudAppBar>
+</div>
 <div class="d-flex flex-column min-vh-100">
-
-    <!-- App Bar -->
-    <div class="d-flex flex-row justify-space-between">
-        <MudAppBar Color="Color.Primary" Fixed="true">
-            <div class="col-4">
-                <MudText Typo="Typo.h6" Class="ml-2">Record Store</MudText>
-            </div>
-            <div class="col-2 text-center">
-                <MudButton Color="Color.Inherit" OnClick=@(() => SelectContent("CD"))>CD</MudButton>
-                <MudButton Color="Color.Inherit" OnClick=@(() => SelectContent("Vinyl"))>Vinyl</MudButton>
-                <MudButton Color="Color.Inherit" OnClick=@(() => SelectContent("Casette"))>Casette</MudButton>
-            </div>
-            <div class="col-5 text-center">
-                <input class="border-1 rounded m-6 p-6 h-6" @bind-value="SearchText"
-                       @bind-value:event="oninput" placeholder="Search by Artist" />
-            </div>
-
-            <div class="col-1">
-                <MudIconButton Icon="@Icons.Material.Filled.Person" Edge="Edge.End" Color="Color.Inherit" Size="Size.Medium" OnClick=@(() => SelectContent("Login")) />
-                <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" Edge="Edge.End" Color="Color.Inherit" Size="Size.Medium" OnClick=@(() => SelectContent("Cart")) />
-            </div>
-        </MudAppBar>
-    </div>
     <!-- Content -->
-    <div class="content flex-grow-1 mb-5 mt-5">
-        @if (selectedContent == "Home")
+    <div class="content flex-grow-1">
+        @if (contentService.SelectedContent == "Products")
         {
-            <Home />
+            <Products />
         }
-        else if (selectedContent == "CD")
-        {
-            <CD />
-        }
-        else if (selectedContent == "Vinyl")
-        {
-            <Vinyl />
-        }
-        else if (selectedContent == "Casette")
-        {
-            <Casette />
-        }
-        else if (selectedContent == "Login")
+        else if (contentService.SelectedContent == "Login")
         {
             <Login />
         }
-        else if (selectedContent == "Cart")
+        else if (contentService.SelectedContent == "Cart")
         {
-            <ShoppingCart/>
+            <ShoppingCart />
+        }
+        else if (contentService.SelectedContent == "Register")
+        {
+            <Register />
         }
     </div>
 
-    <!-- Footer -->
-
-    @* <div class="footer">
+    <div class="footer">
         <Footer />
-    </div> *@
-
-
-    <footer class="bg-light text-center text-lg-start mt-auto w-100">
-        <!-- Section: Links  -->
-        <div class="container p-4">
-            <!-- Grid row -->
-            <div class="row ">
-                <!-- Grid column -->
-                <div class="col-md-4 col-lg-4 col-xl-3 mx-auto mb-4">
-                    <!-- Content -->
-                    <h6 class="text-uppercase fw-bold mb-4">
-                        <i class="fas fa-gem"></i>Record Store
-                    </h6>
-                    <p>
-                        Here you can use rows and columns to organize your footer content. Lorem ipsum
-                        dolor sit amet, consectetur adipisicing elit.
-                    </p>
-                </div>
-                <!-- Grid column -->
-                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-                    <!-- Links -->
-                    <h6 class="text-uppercase fw-bold mb-4">
-                        Products
-                    </h6>
-                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("CD"))>CD</MudButton><br />
-                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Vinyl"))>Vinyl</MudButton><br />
-                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Casette"))>Casette</MudButton><br />
-                </div>
-                <!-- Grid column -->
-                <!-- Grid column -->
-                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-                    <!-- Links -->
-                    <h6 class="text-uppercase fw-bold mb-4">
-                        Useful links
-                    </h6>
-                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Pricing</MudButton><br />
-                    <MudButton Variant="Variant.Text" Size="Size.Small" OnClick=@(() => SelectContent("Products"))>Orders</MudButton><br />
-                </div>
-                <!-- Grid column -->
-                <!-- Grid column -->
-                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-                    <!-- Links -->
-                    <h6 class="text-uppercase fw-bold mb-4">
-                        Contact
-                    </h6>
-                    <i class="fas fa-home"></i> Mjörnvägen 1
-                    <i class="fas fa-home"></i> 443 73 Björboholm
-                    <i class="fas fa-envelope"></i>info@example.com
-
-                </div>
-                <div class="col-md-2 text-end">
-                    <!-- Logo -->
-                    <MudImage Src="images/logo.webp" Alt="Company Logo" Class="img-fluid me-2" style="height: 150px;"></MudImage>
-                </div>
-            </div>
-            <!-- Grid row -->
-        </div>
-        <!-- Section: Links  -->
-        <!-- Copyright -->
-        <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.05);">
-            © 2025 Copyright:
-            <a class="text-reset fw-bold" href="/">Record Store</a>
-        </div>
-        <!-- Copyright -->
-    </footer>
-    <!-- Footer -->
-
+    </div>
 </div>
 
 @code {
-    public string selectedContent = "Home";
-    public string SearchText { get; set; }
-    public void SelectContent(string option)
+
+    protected override async void OnInitialized()
     {
-        selectedContent = option;
+        contentService.SelectContent("Products");
+        contentService.OnChange += async ()=> await InvokeAsync(StateHasChanged);
     }
 
-    protected override async Task OnInitializedAsync()
+    public void Dispose()
     {
+        contentService.OnChange -= async () => await InvokeAsync(StateHasChanged);
     }
-
 }

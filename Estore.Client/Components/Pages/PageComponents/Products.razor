@@ -4,16 +4,32 @@
 @using Core.DTOs
 @using Core.Extensions
 @using Estore.Client.Components.Pages
+@inject ISnackbar Snackbar
 @inject ProductService productService
 
+<div class="container">
 
-<div class="container mb-5">
+    <MudAppBar Fixed="false" Style="position:fixed; left:0; top:64px; width:100%; height:42px; color:brown; justify-content:center">
+        <div class="row w-100">
+            <div class="col-5 text-center">
+                <MudButton Color="Color.Inherit" OnClick="@(()=> FilterProducts("All"))">All</MudButton>
+                <MudButton Color="Color.Inherit" OnClick="@(()=> FilterProducts("CD"))">CD</MudButton>
+                <MudButton Color="Color.Inherit" OnClick="@(()=> FilterProducts("Vinyl"))">Vinyl</MudButton>
+                <MudButton Color="Color.Inherit" OnClick="@(()=> FilterProducts("Casette"))">Casette</MudButton>
+            </div>
+            <div class="col-7 text-center">
+                <input class="border-1 rounded m-6 p-6 h-6" @bind-value="_searchText"
+                @bind-value:event="oninput" placeholder="Search..." />
+            </div>
+        </div>
+    </MudAppBar>
 
-    <div class="row">
-        @if (products != null)
+
+    <div class="row mb-5 mt-5">
+        @if (FilteredProducts is not null)
         {
 
-            @foreach (var item in products)
+            @foreach (var item in FilteredProducts)
             {
                 <div class="col-md-3 mt-3 mb-5 justify-content-center">
                     <MudGrid>
@@ -44,26 +60,48 @@
 
 @code {
     public IEnumerable<ProductDTO>? products { get; set; }
-    public IEnumerable<ProductDTO>? cds { get; set; }
-    public IEnumerable<ProductDTO>? vinyls { get; set; }
-    public IEnumerable<ProductDTO>? casettes { get; set; }
+    public IEnumerable<ProductDTO>? FilteredProducts { get; set; }
+
+    private string _searchText;
 
     public string picFolder = "/images/AlbumCovers/";
 
     protected override async Task OnInitializedAsync()
     {
         products = await productService.GetAllAsync();
-
+        FilteredProducts = products;
     }
 
-    public void AddItemToCart(ProductDTO productDTO)
+    public async Task FilterProducts(string category) // Rewrite it to filter in the Products list
     {
-        var cartItem = productDTO.ToCartItemDTO();
-
-        cartItem.Quantity = 1;
-
-        ShoppingCart.MyCart.CartItems.Add(cartItem);
+        switch (category)
+        {
+            case "All":
+                FilteredProducts = products;
+                break;
+            case "CD":
+                if (products is null) throw new ArgumentNullException("Products is null");
+                FilteredProducts = products.Where(p => p.Category.Name == "CD");
+                break;
+            case "Vinyl":
+                if (products is null) throw new ArgumentNullException("Products is null");
+                FilteredProducts = products.Where(p => p.Category.Name == "Vinyl");
+                break;
+            case "Casette":
+                if (products is null) throw new ArgumentNullException("Products is null");
+                FilteredProducts = products.Where(p => p.Category.Name == "Casette");
+                break;
+            
+        }
     }
+    public void AddItemToCart(ProductDTO item)
+    {
+        if (products == null) throw new ArgumentNullException("List not found");
+        ShoppingCart.MyCart.AddItem(item, products);
+        Snackbar.Add($"Item added to cart!", Severity.Success);
+    }
+
+
 
     // public async Task GetAllCDs()
     // {

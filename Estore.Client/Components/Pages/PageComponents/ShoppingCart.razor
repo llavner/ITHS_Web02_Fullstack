@@ -1,64 +1,97 @@
 ﻿@page "/shoppingcart"
 @using Core.Services
+@using Core.Extensions
 @using Core.DTOs
+@inject ISnackbar Snackbar
 @rendermode InteractiveServer
 @inject ProductService productService
+@inject OrderService orderService
 
-<div class="container w-50">
-    <h1 class="text-center">Shopping Cart</h1>
-
-    <div class="d-flex justify-content-center m-5 p-3">
-        <ul class="list-group">
-            @foreach (var item in listedCartItems)
+<div class="container mb-5 d-flex justify-content-center">
+    <table class="table table-striped mt-5" style="max-width:600px">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Album Title</th>
+                <th scope="col">Artist</th>
+                <th scope="col">Quantity</th>
+                <th scope="col"></th>
+                <th scope="col">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in MyCart.CartItems)
             {
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div class="d-flex flex-row align-items-center">
-                        <img src="@($"{picFolder}{item.PictureUrl}")" alt="@item.AlbumTitle" class="img-thumbnail" style="width: 50px; height: 50px; margin-right: 10px;">
-                        <div>
-                            <h5>@item.AlbumTitle</h5>
-                            <small class="text-muted">@item.Artist</small>
-                        </div>
-                    </div>
-                    <div class="d-flex flex-row align-items-center">
-                        <span class="mx-2">@item.Quantity</span>
-                        <div class="col">
-                            <MudButton Class="btn btn-outline-secondary" Size="Size.Small">
-                                <MudIcon Icon="@Icons.Material.Filled.Remove" Size="Size.Small" />
-                            </MudButton>
-                            <MudButton Class="btn btn-outline-secondary" Size="Size.Small">
-                                <MudIcon Icon="@Icons.Material.Filled.Add" Size="Size.Small"/>
-                            </MudButton>
-                        </div>
-                    </div>
-                    <span class="text-muted">@item.Price</span>
-                </li>
+                <tr>
+                    <td>
+                        <img src="@($"{picFolder}{item.PictureUrl}")" alt="@item.AlbumTitle" class="img-thumbnail" style="width: 50px; height: 50px;">
+                    </td>
+                    <td>@item.AlbumTitle</td>
+                    <td>@item.Artist</td>
+                    <td style="align-items:center">@item.Quantity</td>
+                    <td>
+                        <MudIconButton Icon="@Icons.Material.Filled.Add" Size="Size.Small" OnClick="@(() => Add(item))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Remove" Size="Size.Small" OnClick="@(() => Remove(item))" />
+                    </td>
+                    <td class="text-muted">@((item.Price * item.Quantity).ToString("C"))</td>
+                </tr>
             }
-
-        </ul>
-    </div>
-
-    <hr>
-
-    <div class="d-flex justify-content-between align-items-center">
-        <button class="btn btn-primary">Purchase</button>
-        <span class="h5">Total: @listedCartItems.Sum(item => item.Price * item.Quantity)</span>
-    </div>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6" class="h5 text-end">
+                    Total: @MyCart.CartItems.Sum(item => item.Price * item.Quantity).ToString("C")
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <MudButton Variant="Variant.Text" EndIcon="@Icons.Material.Filled.AppRegistration" Color="Color.Primary" OnClick="@Purchase">Purchase</MudButton>
 </div>
 
 @code {
     public static CartDTO MyCart = new();
-    public List<CartItemDTO> listedCartItems { get; set; }
 
     public string picFolder = "/images/AlbumCovers/";
 
     protected override async Task OnInitializedAsync()
     {
 
-        listedCartItems = MyCart.CartItems.ToList();
+        MyCart.CartItems.ToList();
 
     }
 
+    public async Task Purchase()
+    {
+        //await orderService.AddOrderAsync(MyCart);
 
+    }
 
+    public void Add(CartItemDTO item)
+    {
+        var existingItem = MyCart.CartItems.FirstOrDefault(i => i.ProductId == item.ProductId);
 
+        if (existingItem == null) throw new ArgumentNullException("Item not found");
+
+        existingItem.Quantity++;
+
+        Snackbar.Add($"Amount increased", Severity.Success);
+    }
+
+    public void Remove(CartItemDTO item)
+    {
+        var existingItem = MyCart.CartItems.FirstOrDefault(i => i.ProductId == item.ProductId);
+
+        if (existingItem == null) throw new ArgumentNullException("Item not found");
+
+        if (existingItem.Quantity <= 1)
+        {
+            MyCart.CartItems.Remove(existingItem);
+        }
+        else
+        {
+            existingItem.Quantity--;
+        }
+
+        Snackbar.Add($"Amount Decreased", Severity.Error);
+    }
 }

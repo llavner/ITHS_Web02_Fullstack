@@ -1,0 +1,43 @@
+﻿@page "/register"
+@rendermode InteractiveServer
+@using Core.Services
+@inject ContentService contentService
+
+<div class="d-flex justify-content-center align-items-center mt-5">
+    <form class="d-flex flex-column justify-content-center p-4" style="width: 300px; border: 1px solid #ccc; background-color: #f8f9fa; border-radius: 8px;">
+        <!-- Name input -->
+        <div class="mb-4">
+            <input type="text" class="form-control" />
+            <label class="form-label" for="form2Example1">Full Name</label>
+        </div>
+
+        <!-- Email input -->
+        <div class="mb-4">
+            <input type="email" class="form-control" />
+            <label class="form-label" for="form2Example2">Email address</label>
+        </div>
+
+        <!-- Password input -->
+        <div class="mb-4">
+            <input type="password" class="form-control" />
+            <label class="form-label" for="form2Example3">Password</label>
+        </div>
+
+        <!-- Confirm Password input -->
+        <div class="mb-4">
+            <input type="password" class="form-control" />
+            <label class="form-label" for="form2Example4">Confirm Password</label>
+        </div>
+
+        <!-- Submit button -->
+        <button type="button" class="btn btn-primary btn-block mb-4">Register</button>
+
+        <!-- Login link -->
+        <div class="text-center">
+            <p>Already a member? <MudButton Variant="Variant.Text" EndIcon="@Icons.Material.Filled.Login" Color="Color.Primary" OnClick="@(() => contentService.SelectContent("Login"))">Login</MudButton></p>
+        </div>
+    </form>
+</div>
+@code {
+
+}

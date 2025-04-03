@@ -18,8 +18,7 @@ public static class ProductExtension
             PictureUrl = productDTO.PictureUrl,
             Artist = productDTO.Artist,
             AlbumTitle = productDTO.AlbumTitle,
-            Price = productDTO.Price,
-            Quantity = productDTO.StockQuantity 
+            Price = productDTO.Price
         };
     }
 

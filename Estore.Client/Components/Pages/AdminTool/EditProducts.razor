@@ -47,6 +47,7 @@
             </ToolBarContent>
             <Columns>
                 <PropertyColumn Property="x => x.Id" Title="Product Id" />
+                <PropertyColumn Property="x => x.PictureUrl" Title="Picture" />
                 <PropertyColumn Property="x => x.Artist" Title="Artist Name" />
                 <PropertyColumn Property="x => x.AlbumTitle" Title="Album Title" />
                 <PropertyColumn Property="x => x.Price" />
@@ -62,8 +63,11 @@
                     </CellTemplate>
                 </TemplateColumn>
             </Columns>
+            
         </MudDataGrid>
     </MudItem>
+
+            
 </div>
 
 @code {

@@ -2,8 +2,7 @@
 
 Ett arbete på [IT Högskolan](https://www.iths.se/) av [Marcus Renvall](https://github.com/llavner).
 
-## API:
-[Specifikation](API-spec.md)
+### API: [Specifikation](API-spec.md)
 
 ## Innehåll:
 -  SQL Database

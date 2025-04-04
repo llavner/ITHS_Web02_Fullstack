@@ -177,7 +177,7 @@ Required parameter: id
 ```json
 Request Body:
 {
-    "id": "103"
+    "id": "28"
 }
 
 Response
@@ -185,11 +185,18 @@ Response
 
 Response Body:
 {
-    "id": "103",
-    "name": "Butter",
-    "price": 25.00,
-    "categoryId": 1
-}
+    "id": 28,
+    "pictureUrl": "Beastie-Boys-License-To-Ill.webp",
+    "artist": "Beastie Boys",
+    "albumTitle": "License to Ill",
+    "price": 159,
+    "stockQuantity": 50,
+    "isProductAvailable": true,
+    "categoryId": 25,
+    "category": {
+      "id": 25,
+      "name": "CD"
+    }
 ```
 
 ### Create a new Product:
@@ -415,4 +422,4 @@ Response
 }
 ```
 
-[Top the top](#content)
+[To the top](#content)

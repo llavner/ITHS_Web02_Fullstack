@@ -1,7 +1,7 @@
 # CRUD-API For E-commerce
 **Version 1.0**  
 This API interacts with the backend service of an E-commerce application.  
-It uses endpoints such as Categories, Orders, Products, and Users.
+It uses endpoints such as Categories, Products, and Users.
 
 ## Content
 

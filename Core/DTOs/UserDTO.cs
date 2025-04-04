@@ -19,5 +19,17 @@ public class UserDTO
     [StringLength(50, ErrorMessage = "Phonenumber cannot be longer than 50 characters")]
     public string PhoneNumber { get; set; }
     public bool IsAdmin { get; set; }
+
+    //public UserDTO()
+    //{
+    //    Id = 10;
+    //    FirstName = "John";
+    //    LastName = "Doe;";
+    //    Email = "john@doe.com";
+    //    Address = "1234 Fictional Avenue Apartment 567 New York, NY 10001";
+    //    PhoneNumber = "+1 (212) 555-1234";
+    //    IsAdmin = false;
+
+    //}
 }
 

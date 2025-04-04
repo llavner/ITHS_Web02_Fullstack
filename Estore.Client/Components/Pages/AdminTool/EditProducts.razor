@@ -46,6 +46,7 @@
                 AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
             </ToolBarContent>
             <Columns>
+                <PropertyColumn Property="x => x.Id" Title="Product Id" />
                 <PropertyColumn Property="x => x.Artist" Title="Artist Name" />
                 <PropertyColumn Property="x => x.AlbumTitle" Title="Album Title" />
                 <PropertyColumn Property="x => x.Price" />
@@ -84,6 +85,9 @@
     private Func<ProductDTO, bool> _quickFilter => x =>
     {
         if (string.IsNullOrWhiteSpace(_searchString))
+            return true;
+
+        if (x.Id.ToString().Contains(_searchString, StringComparison.OrdinalIgnoreCase))
             return true;
 
         if (x.Artist.Contains(_searchString, StringComparison.OrdinalIgnoreCase))

@@ -13,18 +13,13 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "CRUD API",
-        Description = "An ASP.NET Core Web API for managing products, customers and admin.",
-        TermsOfService = new Uri("https://example.com/terms"),
+        Title = "CRUD-API",
+        Description = "An ASP.NET Core Web API for managing products, users, categories and orders in E-Commerce",
+        TermsOfService = new Uri("https://github.com/llavner/ITHS_Web02_Fullstack/blob/master/API-spec.md"),
         Contact = new OpenApiContact
         {
             Name = "Marcus Renvall",
             Url = new Uri("https://github.com/llavner")
-        },
-        License = new OpenApiLicense
-        {
-            //Name = "None",
-            //Url = new Uri("https://example.com/license")
         }
     });
 });

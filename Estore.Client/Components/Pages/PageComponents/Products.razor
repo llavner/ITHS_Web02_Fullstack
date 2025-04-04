@@ -17,10 +17,10 @@
                 <MudButton Color="Color.Inherit" OnClick="@(()=> FilterProducts("Vinyl"))">Vinyl</MudButton>
                 <MudButton Color="Color.Inherit" OnClick="@(()=> FilterProducts("Casette"))">Casette</MudButton>
             </div>
-            <div class="col-7 text-center">
-                <input class="border-1 rounded m-6 p-6 h-6" @bind-value="_searchText"
-                @bind-value:event="oninput" placeholder="Search..." />
-            </div>
+            @* <div class="col-7 text-center">
+                <input class="border-1 rounded m-6 p-6 h-6" @bind-value="searchText"
+                @bind-value:event="oninput" @oninput="" placeholder="Search..." />
+            </div> *@
         </div>
     </MudAppBar>
 
@@ -62,7 +62,8 @@
     public IEnumerable<ProductDTO>? products { get; set; }
     public IEnumerable<ProductDTO>? FilteredProducts { get; set; }
 
-    private string _searchText;
+    private string? searchText;
+
 
     public string picFolder = "/images/AlbumCovers/";
 
@@ -72,7 +73,19 @@
         FilteredProducts = products;
     }
 
-    public async Task FilterProducts(string category) // Rewrite it to filter in the Products list
+    public void FilterBySearch()
+    {
+        if(string.IsNullOrWhiteSpace(searchText))
+        {
+            FilteredProducts = products;
+        }
+        else
+        {
+            FilteredProducts = products.Where(x => x.Artist.Contains(searchText, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+    }
+
+    public void FilterProducts(string category) 
     {
         switch (category)
         {
@@ -101,20 +114,6 @@
         Snackbar.Add($"Item added to cart!", Severity.Success);
     }
 
-
-
-    // public async Task GetAllCDs()
-    // {
-    //     cds = await productService.GetCDAsync();
-    // }
-    // public async Task GetAllVinyls()
-    // {
-    //     vinyls = await productService.GetVinylAsync();
-    // }
-    // public async Task GetAllCasettes()
-    // {
-    //     casettes = await productService.GetCasetteAsync();
-    // }
 }
 
 

@@ -1,0 +1,22 @@
+﻿<MudDialog Style="text-align-center">
+    <TitleContent>
+        Thank you for your fictive purchase!!
+    </TitleContent>
+    <DialogContent>
+        <MudImage Src="images/under_construction.png" Alt="Under Construction" Elevation="25" Class="rounded-lg ma-4" />
+        <br />
+        (OrderService is not implemented yet, sorry.)
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+
+    private void Cancel() => MudDialog.Cancel();
+}

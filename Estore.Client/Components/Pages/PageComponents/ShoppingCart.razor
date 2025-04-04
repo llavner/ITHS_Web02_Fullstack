@@ -2,7 +2,9 @@
 @using Core.Services
 @using Core.Extensions
 @using Core.DTOs
+@using Estore.Client.Components.Pages.Dialogs
 @inject ISnackbar Snackbar
+@inject IDialogService DialogService
 @rendermode InteractiveServer
 @inject ProductService productService
 @inject OrderService orderService
@@ -48,24 +50,33 @@
         </table>
     </div>
     <div class="d-flex justify-content-center">
-        <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.ShoppingCartCheckout" Color="Color.Success" OnClick="@Purchase">Purchase</MudButton>
+        <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.ShoppingCartCheckout" Color="Color.Success" OnClick="OpenDialogAsync">Purchase</MudButton>
     </div>
 </div>
 @code {
-    public static CartDTO MyCart = new();
+    public static CartDTO MyCart { get; set; } = new();
+    public UserDTO ActiveUser { get; set; } = new();
+
 
     public string picFolder = "/images/AlbumCovers/";
 
     protected override async Task OnInitializedAsync()
     {
-
         MyCart.CartItems.ToList();
+    }
 
+    private Task OpenDialogAsync()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        MyCart = new();
+
+        return DialogService.ShowAsync<PurchaseDialog>("Simple Dialog", options);
     }
 
     public async Task Purchase()
     {
-        //await orderService.AddOrderAsync(MyCart);
+        //await orderService.AddOrderAsync(MyCart, ActiveUser);
 
     }
 

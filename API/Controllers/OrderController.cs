@@ -42,36 +42,36 @@ public class OrderController(IOrderRepository orderRepository) : ControllerBase
         return Ok(new { message = $"Added order {order.Id}", order });
     }
 
-    //// PUT api/<OrderController>/5
-    //[HttpPut("{id}")]
-    //public async Task<IActionResult> Put(int id, [FromBody] Order order)
-    //{
-    //    if (id != order.Id)
-    //        return BadRequest(new { message = $"Id: {id} not found." });
-    //    else
-    //    {
-    //        await _orderRepository.UpdateAsync(order);
-    //        return Ok(new { message = $"Order with Id: {order.Id} has been updated." });
-    //    }
+    // PUT api/<OrderController>/5
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Put(int id, [FromBody] Order order)
+    {
+        if (id != order.Id)
+            return BadRequest(new { message = $"Id: {id} not found." });
+        else
+        {
+            await _orderRepository.UpdateAsync(order);
+            return Ok(new { message = $"Order with Id: {order.Id} has been updated." });
+        }
 
 
-    //}
+    }
 
-    //// DELETE api/<OrderController>/5
-    //[HttpDelete("{id}")]
-    //public async Task<IActionResult> Delete(int id)
-    //{
-    //    var order = await _orderRepository.GetByIdAsync(id);
+    // DELETE api/<OrderController>/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var order = await _orderRepository.GetByIdAsync(id);
 
-    //    if (order == null)
-    //        return NotFound(new { message = "Order not found." });
-    //    else
-    //    {
-    //        await _orderRepository.DeleteAsync(id);
-    //        return Ok(new { message = $"Order with Id: {order.Id} deleted." });
+        if (order == null)
+            return NotFound(new { message = "Order not found." });
+        else
+        {
+            await _orderRepository.DeleteAsync(id);
+            return Ok(new { message = $"Order with Id: {order.Id} deleted." });
 
-    //    }
+        }
 
-    //}
+    }
 }
 

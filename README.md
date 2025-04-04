@@ -2,6 +2,8 @@
 
 Ett arbete på [IT Högskolan](https://www.iths.se/) av [Marcus Renvall](https://github.com/llavner).
 
+## API:
+[Specifikation](other_file.md)
 
 ## Innehåll:
 -  SQL Database
